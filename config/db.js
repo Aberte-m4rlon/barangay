@@ -34,19 +34,49 @@ const mysqlConnectionConfig = {
   }
 };
 
+const postgresConnectionConfig = {
+  dialect: 'postgres',
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
+};
+
+const getSupabaseConnectionUrl = () => {
+  return process.env.DATABASE_URL || process.env.SUPABASE_URL || process.env.SUPABASE_DB_URL || '';
+};
+
+const shouldUseSupabase = () => {
+  return process.env.DB_USE_SQLITE !== 'true' && !!getSupabaseConnectionUrl();
+};
+
 const shouldUseMysql = () => {
-  return process.env.DB_USE_SQLITE !== 'true' && !!process.env.DB_NAME && !!process.env.DB_USER;
+  return process.env.DB_USE_SQLITE !== 'true' && !getSupabaseConnectionUrl() && !!process.env.DB_NAME && !!process.env.DB_USER;
 };
 
 const connectDB = async () => {
   try {
-    if (shouldUseMysql()) {
+    if (shouldUseSupabase()) {
+      const postgresSequelize = new Sequelize(getSupabaseConnectionUrl(), postgresConnectionConfig);
+      await postgresSequelize.authenticate();
+      sequelize = postgresSequelize;
+      console.log('✅ Supabase Postgres Connected');
+    } else if (shouldUseMysql()) {
       const mysqlSequelize = new Sequelize(mysqlConnectionConfig);
       await mysqlSequelize.authenticate();
       sequelize = mysqlSequelize;
       console.log('✅ MySQL Connected');
     } else {
-      console.log('ℹ️ MySQL not configured or unavailable. Using SQLite fallback database.');
+      console.log('ℹ️ No external database configured. Using SQLite fallback database.');
       sequelize = sqliteSequelize;
     }
 
