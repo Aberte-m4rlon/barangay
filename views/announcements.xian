@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Announcements | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css">
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .masonry-grid {
+      column-count: 1;
+      column-gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+      .masonry-grid {
+        column-count: 2;
+      }
+    }
+    @media (min-width: 1024px) {
+      .masonry-grid {
+        column-count: 3;
+      }
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+{{>head}}
+<body class="bg-gray-50 text-gray-800">
+  {{> navbar }}
+
+  <!-- Modern Header -->
+  <section class="relative bg-gradient-to-br from-green-50 via-white to-green-50 py-16 md:py-24 overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center animate-fadeIn">
+        <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+          <i data-lucide="megaphone" class="w-4 h-4"></i>
+          Community Updates
+        </div>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">
+          Barangay Announcements
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+          Stay informed with the latest news, events, and important advisories from your barangay
+        </p>
+        
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/announcements/archived" class="inline-flex items-center gap-2 bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-lg transition-all hover:scale-105">
+            <i data-lucide="archive" class="w-5 h-5"></i>
+            View Archived
+          </a>
+          {{#if user}}
+            {{#if (or (eq user.role "Admin") (eq user.role "Secretary"))}}
+              <a href="/announcement/new" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                Create New
+              </a>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Announcements Grid - Modern Masonry Layout -->
+  <section class="bg-white py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {{#if announcements.length}}
+        <!-- Stats Bar -->
+        <div class="mb-8 bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
+                <i data-lucide="bell" class="w-6 h-6 text-white"></i>
+              </div>
+              <div>
+                <div class="text-2xl font-bold text-gray-900">{{announcements.length}}</div>
+                <div class="text-sm text-gray-600">Active Announcements</div>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="filterAnnouncements('all')" class="filter-btn active px-4 py-2 rounded-lg font-semibold text-sm transition-all">
+                All
+              </button>
+              <button onclick="filterAnnouncements('recent')" class="filter-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all">
+                Recent
+              </button>
+              <button onclick="filterAnnouncements('media')" class="filter-btn px-4 py-2 rounded-lg font-semibold text-sm transition-all">
+                With Media
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Masonry Grid -->
+        <div class="masonry-grid">
+          {{#each announcements}}
+            <div class="masonry-item announcement-card" data-has-media="{{#if this.media.length}}true{{else}}false{{/if}}">
+              <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-green-300 overflow-hidden">
+                
+                <!-- Media Section -->
+                {{#if this.media.length}}
+                  <div class="relative overflow-hidden bg-gray-100">
+                    {{#if (or (endsWith this.media.[0] ".jpg") (endsWith this.media.[0] ".jpeg") (endsWith this.media.[0] ".png") (endsWith this.media.[0] ".gif") (endsWith this.media.[0] ".webp"))}}
+                      <img src="/uploads/{{this.media.[0]}}" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500" alt="{{title}}">
+                      {{#if this.media.[1]}}
+                        <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                          <i data-lucide="images" class="w-3.5 h-3.5"></i>
+                          +{{this.media.length}}
+                        </div>
+                      {{/if}}
+                    {{else if (or (endsWith this.media.[0] ".mp4") (endsWith this.media.[0] ".mov") (endsWith this.media.[0] ".avi") (endsWith this.media.[0] ".webm") (endsWith this.media.[0] ".mkv"))}}
+                      <div class="relative">
+                        <video class="w-full h-64 object-cover bg-black" preload="metadata">
+                          <source src="/uploads/{{this.media.[0]}}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
+                            <i data-lucide="play" class="w-8 h-8 text-green-700"></i>
+                          </div>
+                        </div>
+                        <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                          <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                          VIDEO
+                        </div>
+                      </div>
+                    {{/if}}
+                  </div>
+                {{/if}}
+
+                <!-- Content -->
+                <div class="p-6">
+                  <!-- Meta Info -->
+                  <div class="flex items-center gap-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
+                      <i data-lucide="user" class="w-4 h-4 text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm font-semibold text-gray-900 truncate">{{posted_by}}</div>
+                      <div class="text-xs text-gray-500 flex items-center gap-1">
+                        <i data-lucide="calendar" class="w-3 h-3"></i>
+                        {{date_posted}}
+                      </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                      <span class="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-lg text-xs font-bold">
+                        <i data-lucide="bell" class="w-3 h-3"></i>
+                        New
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Title & Message -->
+                  <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-700 transition-colors">
+                    {{title}}
+                  </h3>
+                  <p class="text-gray-600 leading-relaxed mb-4">
+                    {{message}}
+                  </p>
+
+                  <!-- Media Count -->
+                  {{#if this.media.length}}
+                    <div class="flex items-center gap-4 mb-4 pb-4 border-b border-gray-100">
+                      <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i data-lucide="image" class="w-4 h-4 text-green-600"></i>
+                        <span>{{this.media.length}} media file{{#if (gt this.media.length 1)}}s{{/if}}</span>
+                      </div>
+                    </div>
+                  {{/if}}
+
+                  <!-- Actions -->
+                  {{#if ../user}}
+                    {{#if (or (eq ../user.role "Admin") (eq ../user.role "Secretary"))}}
+                      <div class="flex gap-2">
+                        <button onclick="showArchiveModal('{{this.id}}')" class="flex-1 btn-ripple bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                          <i data-lucide="archive" class="w-4 h-4"></i>
+                          Archive
+                        </button>
+                        <button onclick="showDeleteModal('{{this.id}}')" class="flex-1 btn-ripple bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                          <i data-lucide="trash-2" class="w-4 h-4"></i>
+                          Delete
+                        </button>
+                      </div>
+                    {{/if}}
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <!-- Empty State -->
+        <div class="text-center py-20 bg-gradient-to-br from-gray-50 to-green-50 rounded-3xl border-2 border-dashed border-gray-300">
+          <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i data-lucide="inbox" class="w-12 h-12 text-gray-400"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-700 mb-3">No Announcements Yet</h3>
+          <p class="text-gray-500 mb-8 max-w-md mx-auto">
+            There are no active announcements at the moment. Check back later for updates!
+          </p>
+          {{#if user}}
+            {{#if (or (eq user.role "Admin") (eq user.role "Secretary"))}}
+              <a href="/announcement/new" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                Create First Announcement
+              </a>
+            {{/if}}
+          {{/if}}
+        </div>
+      {{/if}}
+    </div>
+  </section>
+
+  <!-- Archive Confirmation Modal -->
+  <div id="archiveModal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full animate-scaleIn">
+      <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-6 rounded-t-3xl">
+        <div class="flex items-center gap-3">
+          <i data-lucide="archive" class="w-8 h-8"></i>
+          <h3 class="text-2xl font-bold">Archive Announcement?</h3>
+        </div>
+      </div>
+      <div class="p-6">
+        <p class="text-gray-700 mb-6">This announcement will be moved to the archive. You can restore it later if needed.</p>
+        <div class="flex gap-3">
+          <button onclick="closeArchiveModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-3 rounded-xl font-bold transition-all">
+            Cancel
+          </button>
+          <button onclick="confirmArchive()" class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-3 rounded-xl font-bold transition-all">
+            Archive
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full animate-scaleIn">
+      <div class="bg-gradient-to-r from-red-600 to-red-700 text-white p-6 rounded-t-3xl">
+        <div class="flex items-center gap-3">
+          <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+          <h3 class="text-2xl font-bold">Delete Announcement?</h3>
+        </div>
+      </div>
+      <div class="p-6">
+        <p class="text-gray-700 mb-6">This will permanently delete this announcement. This action cannot be undone!</p>
+        <div class="flex gap-3">
+          <button onclick="closeDeleteModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-3 rounded-xl font-bold transition-all">
+            Cancel
+          </button>
+          <button onclick="confirmDelete()" class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-xl font-bold transition-all">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    let currentAnnouncementId = null;
+
+    // Filter functionality
+    function filterAnnouncements(filter) {
+      const cards = document.querySelectorAll('.announcement-card');
+      const buttons = document.querySelectorAll('.filter-btn');
+      
+      // Update active button
+      buttons.forEach(btn => {
+        btn.classList.remove('active', 'bg-green-600', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+      });
+      event.target.classList.add('active', 'bg-green-600', 'text-white');
+      event.target.classList.remove('bg-white', 'text-gray-700', 'hover:bg-gray-100');
+      
+      // Filter cards
+      cards.forEach(card => {
+        if (filter === 'all') {
+          card.style.display = 'block';
+        } else if (filter === 'media') {
+          card.style.display = card.dataset.hasMedia === 'true' ? 'block' : 'none';
+        } else if (filter === 'recent') {
+          // Show all for now (can be enhanced with date filtering)
+          card.style.display = 'block';
+        }
+      });
+    }
+
+    // Archive Modal Functions
+    function showArchiveModal(id) {
+      currentAnnouncementId = id;
+      document.getElementById('archiveModal').classList.remove('hidden');
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+
+    function closeArchiveModal() {
+      document.getElementById('archiveModal').classList.add('hidden');
+      currentAnnouncementId = null;
+    }
+
+    function confirmArchive() {
+      if (currentAnnouncementId) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/announcement/archive/${currentAnnouncementId}`;
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+
+    // Delete Modal Functions
+    function showDeleteModal(id) {
+      currentAnnouncementId = id;
+      document.getElementById('deleteModal').classList.remove('hidden');
+      setTimeout(() => lucide.createIcons(), 100);
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').classList.add('hidden');
+      currentAnnouncementId = null;
+    }
+
+    function confirmDelete() {
+      if (currentAnnouncementId) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/announcement/delete/${currentAnnouncementId}`;
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeArchiveModal();
+        closeDeleteModal();
+      }
+    });
+
+    // Close modals on backdrop click
+    document.getElementById('archiveModal').addEventListener('click', function(e) {
+      if (e.target === this) closeArchiveModal();
+    });
+
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+      if (e.target === this) closeDeleteModal();
+    });
+
+    // Fade in animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.announcement-card').forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+      observer.observe(card);
+    });
+
+    // Re-initialize icons after animations
+    setTimeout(() => {
+      lucide.createIcons();
+    }, 100);
+  </script>
+</body>
+</html>

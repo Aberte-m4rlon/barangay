@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate of Indigency - {{request.full_name}}</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 0; }
+      .no-print { display: none !important; }
+      .certificate { page-break-after: always; }
+    }
+    
+    body {
+      font-family: 'Times New Roman', serif;
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .certificate {
+      width: 8.5in;
+      height: 11in;
+      margin: 0 auto;
+      background: white;
+      padding: 0.75in;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      position: relative;
+      background-image: 
+        linear-gradient(rgba(22, 163, 74, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 163, 74, 0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    
+    .header {
+      text-align: center;
+      border-bottom: 3px double #16a34a;
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 10px;
+    }
+    
+    .republic {
+      font-size: 14px;
+      font-weight: normal;
+      margin: 5px 0;
+    }
+    
+    .office {
+      font-size: 18px;
+      font-weight: bold;
+      color: #16a34a;
+      margin: 10px 0;
+    }
+    
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #16a34a;
+      margin: 30px 0 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    
+    .content {
+      line-height: 2;
+      font-size: 16px;
+      text-align: justify;
+      margin: 30px 0;
+    }
+    
+    .name {
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 18px;
+    }
+    
+    .purpose {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    
+    .signature-section {
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .signature-box {
+      text-align: center;
+      width: 45%;
+    }
+    
+    .signature-line {
+      border-top: 2px solid #000;
+      margin-top: 50px;
+      padding-top: 5px;
+      font-weight: bold;
+    }
+    
+    .position {
+      font-size: 14px;
+      font-style: italic;
+    }
+    
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      text-align: center;
+      color: #666;
+    }
+    
+    .seal {
+      position: absolute;
+      bottom: 150px;
+      left: 100px;
+      width: 120px;
+      height: 120px;
+      border: 3px solid #16a34a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      text-align: center;
+      color: #16a34a;
+      font-weight: bold;
+      opacity: 0.3;
+    }
+    
+    .control-number {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .print-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    
+    .print-button:hover {
+      background: #15803d;
+    }
+    
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .back-button:hover {
+      background: #4b5563;
+    }
+    
+    .edit-button {
+      position: fixed;
+      top: 20px;
+      left: 120px;
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .edit-button:hover {
+      background: #d97706;
+    }
+  </style>
+</head>
+<body>
+  <a href="/secretary/dashboard" class="back-button no-print">← Back</a>
+  <a href="/certificate-settings" class="edit-button no-print">⚙️ Edit Certificate</a>
+  <button onclick="window.print()" class="print-button no-print">🖨️ Print Certificate</button>
+  
+  <div class="certificate">
+    <div class="control-number">
+      Control No: {{request.id}}-{{date_issued}}
+    </div>
+    
+    <div class="header">
+      <div class="logo">
+        {{#if settings.logo_url}}
+          <img src="{{settings.logo_url}}" alt="Logo" style="width: 80px; height: 80px; object-fit: contain;">
+        {{else}}
+          <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke="#16a34a" stroke-width="3"/>
+            <path d="M50 20 L60 40 L80 40 L65 52 L70 70 L50 58 L30 70 L35 52 L20 40 L40 40 Z" fill="#16a34a"/>
+          </svg>
+        {{/if}}
+      </div>
+      <div class="republic">{{settings.republic}}</div>
+      <div class="republic">{{settings.province}}</div>
+      <div class="republic">{{settings.municipality}}</div>
+      <div class="office">{{settings.office_title}}</div>
+      <div class="republic">{{settings.barangay_name}}</div>
+    </div>
+    
+    <div style="text-align: center;">
+      <div class="title">{{settings.certificate_title}}</div>
+    </div>
+    
+    <div class="content">
+      <p style="text-indent: 50px;">
+        TO WHOM IT MAY CONCERN:
+      </p>
+      
+      <p style="text-indent: 50px;">
+        This is to certify that <span class="name">{{request.full_name}}</span>, 
+        of legal age, Filipino citizen, and a bonafide resident of 
+        <span class="name">{{request.address}}, {{settings.barangay_name}}, {{settings.municipality}}, {{settings.province}}</span>, 
+        is known to me to be a person of good moral character.
+      </p>
+      
+      <p style="text-indent: 50px;">
+        This is to certify further that the above-named person belongs to an <strong>INDIGENT FAMILY</strong> 
+        in this barangay and that he/she is in need of financial assistance for 
+        <span class="purpose">{{request.purpose}}</span>.
+      </p>
+      
+      <p style="text-indent: 50px;">
+        This certification is being issued upon the request of the above-named person 
+        for whatever legal purpose it may serve.
+      </p>
+      
+      <p style="text-indent: 50px;">
+        Issued this <strong>{{day}}</strong> day of <strong>{{month}}</strong>, <strong>{{year}}</strong> 
+        at {{settings.barangay_name}}, {{settings.municipality}}, {{settings.province}}, Philippines.
+      </p>
+    </div>
+    
+    <div class="signature-section">
+      <div class="signature-box">
+        <div class="signature-line">
+          {{settings.secretary_name}}
+        </div>
+        <div class="position">{{settings.secretary_title}}</div>
+      </div>
+      
+      <div class="signature-box">
+        <div class="signature-line">
+          {{settings.captain_name}}
+        </div>
+        <div class="position">{{settings.captain_title}}</div>
+      </div>
+    </div>
+    
+    {{#if settings.seal_enabled}}
+    <div class="seal">
+      {{settings.seal_text_line1}}<br/>{{settings.seal_text_line2}}
+    </div>
+    {{/if}}
+    
+    <div class="footer">
+      <p>{{settings.seal_text}}</p>
+      <p>{{settings.validity_text}}</p>
+    </div>
+  </div>
+  
+  <script>
+    // Auto-focus print dialog after page loads
+    window.addEventListener('load', function() {
+      // Uncomment to auto-print on load
+      // setTimeout(() => window.print(), 500);
+    });
+  </script>
+</body>
+</html>

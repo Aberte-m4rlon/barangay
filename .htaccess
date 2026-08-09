@@ -1,0 +1,7 @@
+# Minimal configuration to test
+RewriteEngine On
+
+# Proxy to Node.js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://localhost:3010/$1 [P,L]

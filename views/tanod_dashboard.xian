@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tanod Dashboard | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-50 to-green-50 text-gray-800 font-sans antialiased">
+{{>head}}
+  {{> navbar }}
+
+  <!-- Dashboard Header -->
+  <section class="bg-gradient-to-r from-green-600 via-green-700 to-green-800 py-8 md:py-12 text-center text-white shadow-2xl relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-float"></div>
+    </div>
+    <div class="relative z-10 animate-fadeIn">
+      <div class="flex justify-center mb-3">
+        <i data-lucide="shield" class="w-12 h-12 md:w-16 md:h-16 text-white animate-pulse-slow"></i>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold mb-2">Welcome, Tanod!</h1>
+      <p class="text-green-50 text-sm md:text-lg">You have Tanod access. Check announcements and submit incident reports</p>
+    </div>
+  </section>
+
+  <!-- Dashboard Container -->
+  <section class="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16 animate-fadeIn">
+    <div class="bg-white rounded-3xl shadow-2xl border-2 border-gray-200 p-6 md:p-10">
+
+      <!-- Action Cards -->
+      <div class="grid sm:grid-cols-2 gap-6 md:gap-8">
+
+        <!-- Announcements Card -->
+        <a href="/announcements"
+          class="group bg-white border-2 border-gray-200 hover:border-green-400 p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-center hover-lift card-glow">
+          
+          <div class="mx-auto bg-gradient-to-br from-green-100 to-green-200 w-16 h-16 flex items-center justify-center rounded-full mb-5 group-hover:scale-110 transition-transform">
+            <i data-lucide="megaphone" class="w-8 h-8 text-green-700"></i>
+          </div>
+
+          <h3 class="text-xl font-bold text-green-700 mb-2">View Announcements</h3>
+          <p class="text-gray-600">Stay updated on recent barangay notices and events</p>
+        </a>
+
+        <!-- Report Submission Card -->
+        <a href="/blotter"
+          class="group bg-white border-2 border-gray-200 hover:border-yellow-400 p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 text-center hover-lift card-glow">
+          
+          <div class="mx-auto bg-gradient-to-br from-yellow-100 to-yellow-200 w-16 h-16 flex items-center justify-center rounded-full mb-5 group-hover:scale-110 transition-transform">
+            <i data-lucide="clipboard-list" class="w-8 h-8 text-yellow-600"></i>
+          </div>
+
+          <h3 class="text-xl font-bold text-yellow-700 mb-2">View Blotter Reports</h3>
+          <p class="text-gray-600">Check incident reports and community disturbances</p>
+        </a>
+
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

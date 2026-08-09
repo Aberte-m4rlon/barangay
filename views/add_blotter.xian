@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Blotter Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-green-50 min-h-screen font-sans">
+{{> head }}
+  {{> navbar }}
+  
+  <div class="max-w-4xl mx-auto py-8 md:py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
+    <div class="bg-white shadow-2xl rounded-3xl p-6 md:p-10 border-2 border-gray-200">
+      
+      <div class="flex items-center gap-3 mb-8">
+        <div class="bg-green-100 p-3 rounded-xl">
+          <i data-lucide="file-text" class="text-green-700 w-8 h-8"></i>
+        </div>
+        <h1 class="text-2xl md:text-4xl font-extrabold text-gray-800">Add Blotter Report</h1>
+      </div>
+
+      <form action="/blotters/add" method="POST" class="space-y-6">
+
+        <!-- Complainant Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="user" class="inline w-4 h-4 mr-1"></i> Complainant Name
+            </label>
+            <input type="text" name="complainant_name" required 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="phone" class="inline w-4 h-4 mr-1"></i> Complainant Contact
+            </label>
+            <input type="text" name="complainant_contact" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Respondent Info -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="user-x" class="inline w-4 h-4 mr-1"></i> Respondent Name
+            </label>
+            <input type="text" name="respondent_name" required 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="phone-call" class="inline w-4 h-4 mr-1"></i> Respondent Contact
+            </label>
+            <input type="text" name="respondent_contact" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Incident Details -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="alert-circle" class="inline w-4 h-4 mr-1"></i> Incident Type
+            </label>
+            <select name="incident_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+              <option value="">Select type</option>
+              <option value="Physical Altercation">Physical Altercation</option>
+              <option value="Theft">Theft</option>
+              <option value="Verbal Argument">Verbal Argument</option>
+              <option value="Domestic Issue">Domestic Issue</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              <i data-lucide="calendar" class="inline w-4 h-4 mr-1"></i> Incident Date & Time
+            </label>
+            <input type="datetime-local" name="incident_date" 
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            <i data-lucide="map-pin" class="inline w-4 h-4 mr-1"></i> Location of Incident
+          </label>
+          <input type="text" name="location" 
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            <i data-lucide="file-text" class="inline w-4 h-4 mr-1"></i> Description
+          </label>
+          <textarea name="description" rows="4" placeholder="Describe the incident..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            <i data-lucide="tool" class="inline w-4 h-4 mr-1"></i> Action Taken
+          </label>
+          <textarea name="action_taken" rows="3" placeholder="Action taken by Barangay officials..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1">
+            <i data-lucide="check-square" class="inline w-4 h-4 mr-1"></i> Status
+          </label>
+          <select name="status" 
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+            <option value="Pending">Pending</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Referred to Police">Referred to Police</option>
+          </select>
+        </div>
+
+        <div class="flex justify-end gap-4 pt-6">
+          <a href="/blotter" class="btn-ripple bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105">
+            <i data-lucide="x" class="w-4 h-4"></i>
+            Cancel
+          </a>
+          <button type="submit" class="btn-ripple bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold transition-all flex items-center gap-2 hover:scale-105 shadow-lg">
+            <i data-lucide="check" class="w-5 h-5"></i>
+            Submit Report
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

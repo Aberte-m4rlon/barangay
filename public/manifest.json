@@ -1,0 +1,49 @@
+{
+  "name": "BORS - Barangay Online Record System",
+  "short_name": "BORS",
+  "description": "Barangay Online Record System for managing residents, blotter reports, and announcements",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icons8-create-50.png",
+      "sizes": "50x50",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["productivity", "government"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Go to dashboard",
+      "url": "/admin",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Residents",
+      "short_name": "Residents",
+      "description": "Manage residents",
+      "url": "/residents",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "96x96" }]
+    },
+    {
+      "name": "Blotter",
+      "short_name": "Blotter",
+      "description": "View blotter reports",
+      "url": "/blotter",
+      "icons": [{ "src": "/icons/icon.svg", "sizes": "96x96" }]
+    }
+  ]
+}

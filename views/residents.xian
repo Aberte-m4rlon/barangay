@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Residents | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  {{> head }}
+  {{> navbar }}
+
+  <!-- Page Header -->
+  <section class="bg-gradient-to-r from-green-600 to-green-800 py-6 md:py-10 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+          <i data-lucide="users" class="w-8 h-8 md:w-10 md:h-10 text-white"></i>
+          <h1 class="text-2xl md:text-4xl font-extrabold text-white">Resident Records</h1>
+        </div>
+        <p class="text-sm md:text-base text-green-100">Manage, add, and update barangay residents</p>
+      </div>
+      <a href="/residents/add"
+         class="btn-ripple inline-flex items-center gap-2 bg-white text-green-800 hover:bg-green-50 px-5 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        Add Resident
+      </a>
+    </div>
+  </section>
+
+  <!-- Search and Table -->
+  <section class="max-w-7xl mx-auto px-4 py-6 md:py-10">
+    <!-- Search Bar -->
+    <div class="mb-6 animate-fadeIn">
+      <form action="/residents/search" method="GET" class="flex gap-2">
+        <div class="flex-grow relative">
+          <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+          <input type="text" name="q" placeholder="Search resident by name or purok"
+            class="w-full border-2 border-gray-300 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-all" />
+        </div>
+        <button type="submit" class="btn-ripple bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105">
+          <i data-lucide="search" class="w-5 h-5"></i>
+          <span class="hidden sm:inline">Search</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto bg-white shadow-xl rounded-2xl border border-gray-200">
+      <table class="min-w-full text-sm text-left text-gray-700">
+        <thead class="bg-gradient-to-r from-green-600 to-green-700 text-white text-xs md:text-sm uppercase tracking-wide">
+          <tr>
+            <th class="px-3 md:px-6 py-3 md:py-4">#</th>
+            <th class="px-3 md:px-6 py-3 md:py-4">Profile</th>
+            <th class="px-3 md:px-6 py-3 md:py-4">Full Name</th>
+            <th class="px-3 md:px-6 py-3 md:py-4 hidden lg:table-cell">Address</th>
+            <th class="px-3 md:px-6 py-3 md:py-4">Purok</th>
+            <th class="px-3 md:px-6 py-3 md:py-4 hidden md:table-cell">Birthdate</th>
+            <th class="px-3 md:px-6 py-3 md:py-4 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each residents}}
+          <tr class="border-b hover:bg-green-50 transition-colors">
+            <td class="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm font-semibold text-gray-600">{{inc @index}}</td>
+            <td class="px-3 md:px-6 py-3 md:py-4">
+              <img src="{{#if this.profile}}{{this.profile}}{{else}}/uploads/1762320483244-1749951475862.jpg{{/if}}"
+                   alt="Profile Photo"
+                   class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-green-200 shadow-md" />
+            </td>
+            <td class="px-3 md:px-6 py-3 md:py-4 font-semibold text-gray-800 text-xs md:text-sm">{{this.first_name}} {{this.last_name}}</td>
+            <td class="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-600 hidden lg:table-cell">{{this.address}}</td>
+            <td class="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm">
+              <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">{{this.purok}}</span>
+            </td>
+            <td class="px-3 md:px-6 py-3 md:py-4 text-xs md:text-sm text-gray-600 hidden md:table-cell">{{this.birthdate}}</td>
+            <td class="px-3 md:px-6 py-3 md:py-4 text-center">
+              <div class="flex flex-col md:flex-row gap-1 md:gap-2 justify-center">
+                <a href="/residents/view/{{this.resident_id}}"
+                   class="inline-flex items-center justify-center gap-1 bg-blue-100 hover:bg-blue-200 text-blue-800 px-2 md:px-3 py-1 rounded-lg text-xs font-semibold transition-all hover:scale-105">
+                   <i data-lucide="eye" class="w-3 h-3"></i>
+                   <span class="hidden sm:inline">View</span>
+                </a>
+                <a href="/residents/edit/{{this.resident_id}}"
+                   class="inline-flex items-center justify-center gap-1 bg-green-100 hover:bg-green-200 text-green-800 px-2 md:px-3 py-1 rounded-lg text-xs font-semibold transition-all hover:scale-105">
+                   <i data-lucide="edit" class="w-3 h-3"></i>
+                   <span class="hidden sm:inline">Edit</span>
+                </a>
+                <a href="/residents/delete/{{this.resident_id}}"
+                   class="inline-flex items-center justify-center gap-1 bg-red-100 hover:bg-red-200 text-red-700 px-2 md:px-3 py-1 rounded-lg text-xs font-semibold transition-all hover:scale-105"
+                   onclick="return confirm('Are you sure you want to delete this record?');">
+                   <i data-lucide="trash-2" class="w-3 h-3"></i>
+                   <span class="hidden sm:inline">Delete</span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {{else}}
+          <tr>
+            <td colspan="7" class="px-6 py-12 text-center">
+              <i data-lucide="users-x" class="w-16 h-16 text-gray-300 mx-auto mb-3"></i>
+              <p class="text-gray-500 font-medium">No residents found.</p>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {{> footer }}

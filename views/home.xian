@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BORS | Barangay Operations and Records System</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @keyframes float-slow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    .float-animation {
+      animation: float-slow 6s ease-in-out infinite;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+  {{> head }}
+
+  <!-- Hero Section - Modern Design -->
+  <section class="relative bg-gradient-to-br from-green-50 via-white to-green-50 overflow-hidden">
+    <!-- Decorative Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-green-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Content -->
+        <div class="text-center lg:text-left animate-fadeIn">
+          <!-- Barangay Seal Logo -->
+          <div class="flex justify-center lg:justify-start mb-8">
+            <div class="w-32 h-32 md:w-40 md:h-40 rounded-full shadow-2xl border-4 border-green-600 bg-white p-2 transform hover:scale-105 transition-transform overflow-hidden">
+              <img src="/LOGO1.png" alt="Barangay Management Logo" class="w-full h-full object-cover rounded-full">
+            </div>
+          </div>
+          
+          <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            Modern Barangay Management System
+          </div>
+          
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+            Empowering Your
+            <span class="gradient-text block">Barangay Community</span>
+          </h1>
+          
+          <p class="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed">
+            Streamline operations, manage records efficiently, and serve your community better with our comprehensive digital solution.
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="/login" class="btn-ripple group bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 flex items-center justify-center gap-2">
+              <i data-lucide="log-in" class="w-5 h-5"></i>
+              Get Started
+              <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+            <a href="#features" class="bg-white border-2 border-green-600 text-green-700 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+              <i data-lucide="play-circle" class="w-5 h-5"></i>
+              Learn More
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-3 gap-6 mt-12 pt-12 border-t border-gray-200">
+            <div class="text-center lg:text-left">
+              <div class="text-3xl md:text-4xl font-bold text-green-700">100%</div>
+              <div class="text-sm text-gray-600 mt-1">Digital</div>
+            </div>
+            <div class="text-center lg:text-left">
+              <div class="text-3xl md:text-4xl font-bold text-green-700">24/7</div>
+              <div class="text-sm text-gray-600 mt-1">Access</div>
+            </div>
+            <div class="text-center lg:text-left">
+              <div class="text-3xl md:text-4xl font-bold text-green-700">Fast</div>
+              <div class="text-sm text-gray-600 mt-1">Service</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Visual -->
+        <div class="relative hidden lg:block">
+          <div class="relative float-animation">
+            <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-3xl shadow-2xl p-8 transform rotate-3">
+              <div class="bg-white rounded-2xl p-6 transform -rotate-3">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-green-700"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-gray-900">BORS System</div>
+                    <div class="text-sm text-gray-500">Barangay Management</div>
+                  </div>
+                </div>
+                
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3 bg-green-50 p-3 rounded-lg">
+                    <i data-lucide="users" class="w-5 h-5 text-green-700"></i>
+                    <span class="text-sm font-medium text-gray-700">Resident Records</span>
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 ml-auto"></i>
+                  </div>
+                  <div class="flex items-center gap-3 bg-green-50 p-3 rounded-lg">
+                    <i data-lucide="file-text" class="w-5 h-5 text-green-700"></i>
+                    <span class="text-sm font-medium text-gray-700">Certificates</span>
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 ml-auto"></i>
+                  </div>
+                  <div class="flex items-center gap-3 bg-green-50 p-3 rounded-lg">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-green-700"></i>
+                    <span class="text-sm font-medium text-gray-700">Blotter Reports</span>
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 ml-auto"></i>
+                  </div>
+                  <div class="flex items-center gap-3 bg-green-50 p-3 rounded-lg">
+                    <i data-lucide="megaphone" class="w-5 h-5 text-green-700"></i>
+                    <span class="text-sm font-medium text-gray-700">Announcements</span>
+                    <i data-lucide="check-circle" class="w-5 h-5 text-green-600 ml-auto"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Request Indigency CTA - Enhanced -->
+  <section class="relative bg-gradient-to-r from-green-600 via-green-700 to-green-800 py-16 overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full filter blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-green-300 rounded-full filter blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/20">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div class="text-center md:text-left">
+            <div class="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              Quick & Easy
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
+              Need a Certificate of Indigency?
+            </h2>
+            <p class="text-green-50 text-lg mb-6">
+              Submit your request online and receive it via email. Fast, convenient, and hassle-free!
+            </p>
+            <ul class="space-y-3 text-white mb-6">
+              <li class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-200"></i>
+                <span>No need to visit the office</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-200"></i>
+                <span>Get email notifications</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="check-circle" class="w-5 h-5 text-green-200"></i>
+                <span>Track your request status</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="text-center">
+            <div class="bg-white rounded-2xl p-8 shadow-2xl">
+              <div class="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="file-badge" class="w-10 h-10 text-green-700"></i>
+              </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-2">Start Your Request</h3>
+              <p class="text-gray-600 mb-6">Fill out the form and we'll process it right away</p>
+              <a href="/request-indigency"
+                 class="btn-ripple group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all hover:scale-105 w-full">
+                 <i data-lucide="send" class="w-5 h-5"></i>
+                 Request Now
+                 <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features - Modern Grid -->
+  <section id="features" class="bg-gray-50 py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16 animate-fadeIn">
+        <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+          <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+          Our Services
+        </div>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Everything You Need in One Place
+        </h2>
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+          Comprehensive barangay management solutions designed for efficiency and ease of use
+        </p>
+      </div>
+      
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <!-- Feature Card 1 -->
+        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl p-8 text-center transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-green-200">
+          <div class="relative mx-auto mb-6 w-20 h-20">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl transform rotate-6 group-hover:rotate-12 transition-transform"></div>
+            <div class="relative bg-white rounded-2xl w-full h-full flex items-center justify-center">
+              <i data-lucide="users" class="w-10 h-10 text-green-600"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Resident Records</h3>
+          <p class="text-gray-600 leading-relaxed">Store and search resident information quickly and securely with our advanced database.</p>
+        </div>
+
+        <!-- Feature Card 2 -->
+        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl p-8 text-center transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-green-200">
+          <div class="relative mx-auto mb-6 w-20 h-20">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl transform rotate-6 group-hover:rotate-12 transition-transform"></div>
+            <div class="relative bg-white rounded-2xl w-full h-full flex items-center justify-center">
+              <i data-lucide="award" class="w-10 h-10 text-blue-600"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Certificate Issuance</h3>
+          <p class="text-gray-600 leading-relaxed">Issue barangay clearances, residencies, and indigency certificates with ease.</p>
+        </div>
+
+        <!-- Feature Card 3 -->
+        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl p-8 text-center transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-green-200">
+          <div class="relative mx-auto mb-6 w-20 h-20">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl transform rotate-6 group-hover:rotate-12 transition-transform"></div>
+            <div class="relative bg-white rounded-2xl w-full h-full flex items-center justify-center">
+              <i data-lucide="shield-alert" class="w-10 h-10 text-orange-600"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Blotter Records</h3>
+          <p class="text-gray-600 leading-relaxed">Record and manage barangay complaints and incidents securely and efficiently.</p>
+        </div>
+
+        <!-- Feature Card 4 -->
+        <div class="group bg-white rounded-2xl shadow-md hover:shadow-2xl p-8 text-center transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-green-200">
+          <div class="relative mx-auto mb-6 w-20 h-20">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl transform rotate-6 group-hover:rotate-12 transition-transform"></div>
+            <div class="relative bg-white rounded-2xl w-full h-full flex items-center justify-center">
+              <i data-lucide="smartphone" class="w-10 h-10 text-purple-600"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3">Online Requests</h3>
+          <p class="text-gray-600 leading-relaxed">Residents can submit indigency requests online for faster processing and convenience.</p>
+        </div>
+      </div>
+
+      <!-- Additional Features -->
+      <div class="mt-16 grid md:grid-cols-3 gap-8">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+              <i data-lucide="megaphone" class="w-6 h-6 text-green-600"></i>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-900 mb-2">Announcements</h4>
+            <p class="text-gray-600 text-sm">Keep residents informed with real-time announcements and updates.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+              <i data-lucide="message-circle" class="w-6 h-6 text-blue-600"></i>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-900 mb-2">Officials Chat</h4>
+            <p class="text-gray-600 text-sm">Real-time group chat for barangay officials to coordinate efficiently.</p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+              <i data-lucide="lock" class="w-6 h-6 text-purple-600"></i>
+            </div>
+          </div>
+          <div>
+            <h4 class="font-bold text-gray-900 mb-2">Secure & Private</h4>
+            <p class="text-gray-600 text-sm">Your data is protected with industry-standard security measures.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Announcements Section - Modern Cards -->
+  <section class="bg-white py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+          <i data-lucide="megaphone" class="w-4 h-4"></i>
+          Community Updates
+        </div>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">Latest Announcements</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Stay informed with the latest news and updates from your barangay</p>
+      </div>
+
+      {{#if announcements.length}}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {{#each announcements}}
+          <div class="group bg-white rounded-2xl shadow-lg border-2 border-gray-100 hover:border-green-300 overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+            {{#if this.media.length}}
+              <div class="relative h-56 overflow-hidden bg-gradient-to-br from-green-100 to-green-200">
+                {{#if (or (endsWith this.media.[0] ".jpg") (endsWith this.media.[0] ".jpeg") (endsWith this.media.[0] ".png") (endsWith this.media.[0] ".gif") (endsWith this.media.[0] ".webp"))}}
+                  <img src="/uploads/{{this.media.[0]}}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                  {{#if this.media.[1]}}
+                    <div class="absolute top-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                      <i data-lucide="images" class="w-3.5 h-3.5"></i>
+                      +{{this.media.length}}
+                    </div>
+                  {{/if}}
+                {{else if (or (endsWith this.media.[0] ".mp4") (endsWith this.media.[0] ".mov") (endsWith this.media.[0] ".avi") (endsWith this.media.[0] ".webm") (endsWith this.media.[0] ".mkv"))}}
+                  <video class="w-full h-full object-cover bg-black" autoplay muted loop playsinline preload="auto">
+                    <source src="/uploads/{{this.media.[0]}}" type="video/mp4">
+                  </video>
+                  <div class="absolute top-4 left-4 bg-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                    <i data-lucide="video" class="w-3.5 h-3.5"></i>
+                    VIDEO
+                  </div>
+                {{/if}}
+              </div>
+            {{else}}
+              <div class="h-56 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+                <i data-lucide="megaphone" class="w-20 h-20 text-green-400"></i>
+              </div>
+            {{/if}}
+
+            <div class="p-6">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <i data-lucide="user" class="w-4 h-4 text-green-700"></i>
+                </div>
+                <span class="text-sm font-medium text-gray-600">{{this.posted_by}}</span>
+                <span class="text-gray-400">•</span>
+                <span class="text-sm text-gray-500">{{this.date_posted}}</span>
+              </div>
+              
+              <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-green-700 transition-colors">
+                {{this.title}}
+              </h3>
+              
+              <p class="text-gray-600 leading-relaxed line-clamp-3 mb-4">
+                {{this.message}}
+              </p>
+
+              <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                  <i data-lucide="calendar" class="w-4 h-4"></i>
+                  <span>{{this.date_posted}}</span>
+                </div>
+                {{#if this.media.length}}
+                  <div class="flex items-center gap-1 text-sm text-green-600">
+                    <i data-lucide="image" class="w-4 h-4"></i>
+                    <span>{{this.media.length}}</span>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+
+        <!-- View All Button -->
+        <div class="text-center mt-12">
+          <a href="/public/announcements" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-2xl transition-all hover:scale-105">
+            View All Announcements
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </a>
+        </div>
+      {{else}}
+        <div class="text-center py-16 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-300">
+          <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="megaphone" class="w-10 h-10 text-gray-400"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-700 mb-2">No Announcements Yet</h3>
+          <p class="text-gray-500">Check back later for community updates and news</p>
+        </div>
+      {{/if}}
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="bg-gradient-to-br from-gray-50 to-green-50 py-20 md:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left Content -->
+        <div>
+          <div class="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+            <i data-lucide="star" class="w-4 h-4"></i>
+            Why Choose BORS
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
+            Modern Solution for Modern Communities
+          </h2>
+          <p class="text-lg text-gray-600 mb-8">
+            BORS transforms traditional barangay operations into a streamlined digital experience, making government services more accessible and efficient for everyone.
+          </p>
+
+          <div class="space-y-6">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Lightning Fast</h3>
+                <p class="text-gray-600">Process requests and manage records in seconds, not hours. Save time for what matters most.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Secure & Reliable</h3>
+                <p class="text-gray-600">Your data is protected with bank-level security. Regular backups ensure nothing is ever lost.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <i data-lucide="smartphone" class="w-6 h-6 text-white"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Mobile Friendly</h3>
+                <p class="text-gray-600">Access from anywhere, anytime. Works perfectly on phones, tablets, and computers.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <i data-lucide="headphones" class="w-6 h-6 text-white"></i>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Easy to Use</h3>
+                <p class="text-gray-600">Intuitive interface designed for everyone. No technical knowledge required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Stats -->
+        <div class="grid grid-cols-2 gap-6">
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+              <i data-lucide="clock" class="w-6 h-6 text-green-600"></i>
+            </div>
+            <div class="text-4xl font-bold text-gray-900 mb-2">24/7</div>
+            <div class="text-gray-600">Always Available</div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+              <i data-lucide="trending-up" class="w-6 h-6 text-blue-600"></i>
+            </div>
+            <div class="text-4xl font-bold text-gray-900 mb-2">100%</div>
+            <div class="text-gray-600">Digital Records</div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <i data-lucide="users" class="w-6 h-6 text-purple-600"></i>
+            </div>
+            <div class="text-4xl font-bold text-gray-900 mb-2">Easy</div>
+            <div class="text-gray-600">User Interface</div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+              <i data-lucide="shield" class="w-6 h-6 text-orange-600"></i>
+            </div>
+            <div class="text-4xl font-bold text-gray-900 mb-2">Safe</div>
+            <div class="text-gray-600">& Secure</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="bg-gradient-to-r from-green-600 via-green-700 to-green-800 py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full filter blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-green-300 rounded-full filter blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6">
+        Ready to Get Started?
+      </h2>
+      <p class="text-xl text-green-50 mb-10 max-w-2xl mx-auto">
+        Join us in building a more efficient and connected barangay community
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/login" class="group inline-flex items-center justify-center gap-2 bg-white text-green-700 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105">
+          <i data-lucide="log-in" class="w-5 h-5"></i>
+          Login Now
+          <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+        <a href="/request-indigency" class="inline-flex items-center justify-center gap-2 bg-green-800 hover:bg-green-900 text-white px-8 py-4 rounded-xl font-bold text-lg border-2 border-white/20 transition-all hover:scale-105">
+          <i data-lucide="file-text" class="w-5 h-5"></i>
+          Request Certificate
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {{> footer }}
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Intersection Observer for fade-in animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+      section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+      observer.observe(section);
+    });
+
+    // Re-initialize icons after dynamic content loads
+    setTimeout(() => {
+      lucide.createIcons();
+    }, 100);
+  </script>
+</body>
+</html>

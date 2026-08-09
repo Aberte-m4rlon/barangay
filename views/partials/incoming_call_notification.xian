@@ -1,0 +1,219 @@
+<!-- Incoming Call Notification -->
+<div id="incomingCallNotification" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center animate-fadeIn">
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 animate-scaleIn">
+    <!-- Caller Avatar -->
+    <div class="text-center mb-6">
+      <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg animate-pulse">
+        <span id="callerInitial">?</span>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-1" id="callerName">Unknown Caller</h3>
+      <p class="text-sm text-gray-500 mb-2" id="callerRole">Official</p>
+      <div class="flex items-center justify-center gap-2 text-green-600">
+        <i data-lucide="phone-incoming" class="w-5 h-5 animate-bounce"></i>
+        <span class="text-lg font-semibold" id="callType">Incoming Call</span>
+      </div>
+    </div>
+
+    <!-- Ringtone Animation -->
+    <div class="flex justify-center gap-1 mb-6">
+      <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0s"></div>
+      <div class="w-1 h-12 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.1s"></div>
+      <div class="w-1 h-10 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.2s"></div>
+      <div class="w-1 h-14 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.3s"></div>
+      <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.4s"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 justify-center">
+      <button onclick="declineCall()" class="bg-red-600 hover:bg-red-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-red-500/50 transition-all hover:scale-110 active:scale-95">
+        <i data-lucide="phone-off" class="w-8 h-8"></i>
+      </button>
+      <button onclick="acceptCall()" class="bg-green-600 hover:bg-green-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-green-500/50 transition-all hover:scale-110 active:scale-95 animate-pulse">
+        <i data-lucide="phone" class="w-8 h-8"></i>
+      </button>
+    </div>
+
+    <!-- Labels -->
+    <div class="flex justify-center gap-8 mt-4 text-sm text-gray-600">
+      <span>Decline</span>
+      <span>Accept</span>
+    </div>
+  </div>
+</div>
+
+<!-- Audio element for ringtone -->
+<audio id="ringtoneAudio" loop>
+  <source src="/sounds/ringtone.mp3" type="audio/mpeg">
+</audio>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from { 
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to { 
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes soundWave {
+    0%, 100% { 
+      height: 2rem;
+      opacity: 0.5;
+    }
+    50% { 
+      height: 3.5rem;
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .animate-soundWave {
+    animation: soundWave 1s ease-in-out infinite;
+  }
+</style>
+
+<script>
+  let currentCallData = null;
+  let ringtoneAudio = null;
+
+  // Initialize ringtone audio
+  document.addEventListener('DOMContentLoaded', function() {
+    ringtoneAudio = document.getElementById('ringtoneAudio');
+  });
+
+  // Listen for incoming calls via Socket.io
+  socket.on('incoming-call', (callData) => {
+    showIncomingCallNotification(callData);
+  });
+
+  // Show incoming call notification
+  function showIncomingCallNotification(callData) {
+    currentCallData = callData;
+    
+    const notification = document.getElementById('incomingCallNotification');
+    const callerInitial = document.getElementById('callerInitial');
+    const callerName = document.getElementById('callerName');
+    const callerRole = document.getElementById('callerRole');
+    const callType = document.getElementById('callType');
+    
+    // Set caller information
+    callerInitial.textContent = callData.callerName.charAt(0).toUpperCase();
+    callerName.textContent = callData.callerName;
+    callerRole.textContent = callData.callerRole;
+    callType.textContent = callData.type === 'video' ? 'Incoming Video Call' : 'Incoming Audio Call';
+    
+    // Update icon based on call type
+    const icon = callType.querySelector('i');
+    if (callData.type === 'video') {
+      icon.setAttribute('data-lucide', 'video');
+    } else {
+      icon.setAttribute('data-lucide', 'phone-incoming');
+    }
+    
+    // Show notification
+    notification.classList.remove('hidden');
+    
+    // Play ringtone
+    if (ringtoneAudio) {
+      ringtoneAudio.play().catch(err => console.log('Ringtone play failed:', err));
+    }
+    
+    // Refresh icons
+    setTimeout(() => lucide.createIcons(), 100);
+    
+    // Show browser notification if permission granted
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(`${callData.callerName} is calling`, {
+        body: `${callData.type === 'video' ? 'Video' : 'Audio'} call from ${callData.callerRole}`,
+        icon: '/icons/icon-192x192.png',
+        tag: 'incoming-call',
+        requireInteraction: true
+      });
+    }
+  }
+
+  // Accept call
+  function acceptCall() {
+    if (!currentCallData) return;
+    
+    // Hide notification
+    hideIncomingCallNotification();
+    
+    // Emit accept event to server
+    socket.emit('call-accepted', {
+      callId: currentCallData.callId,
+      callerId: currentCallData.callerId
+    });
+    
+    // Start appropriate call type
+    if (currentCallData.type === 'video') {
+      startVideoCall();
+    } else {
+      startAudioCall();
+    }
+    
+    currentCallData = null;
+  }
+
+  // Decline call
+  function declineCall() {
+    if (!currentCallData) return;
+    
+    // Hide notification
+    hideIncomingCallNotification();
+    
+    // Emit decline event to server
+    socket.emit('call-declined', {
+      callId: currentCallData.callId,
+      callerId: currentCallData.callerId
+    });
+    
+    currentCallData = null;
+  }
+
+  // Hide incoming call notification
+  function hideIncomingCallNotification() {
+    const notification = document.getElementById('incomingCallNotification');
+    notification.classList.add('hidden');
+    
+    // Stop ringtone
+    if (ringtoneAudio) {
+      ringtoneAudio.pause();
+      ringtoneAudio.currentTime = 0;
+    }
+  }
+
+  // Request notification permission on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  });
+
+  // Auto-decline after 30 seconds
+  let callTimeout = null;
+  socket.on('incoming-call', (callData) => {
+    if (callTimeout) clearTimeout(callTimeout);
+    
+    callTimeout = setTimeout(() => {
+      if (currentCallData && currentCallData.callId === callData.callId) {
+        declineCall();
+      }
+    }, 30000); // 30 seconds
+  });
+</script>

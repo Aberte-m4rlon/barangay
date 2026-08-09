@@ -1,0 +1,864 @@
+<!-- Floating Chat Icon with Call Buttons -->
+<div id="chatButton" class="fixed bottom-6 right-6 z-50 group">
+  <!-- Video Call Button -->
+  <button onclick="startVideoCall()" class="absolute -top-16 right-0 bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white w-12 h-12 md:w-14 md:h-14 rounded-full shadow-xl hover:shadow-blue-500/50 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0" title="Video Call">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+  </button>
+  
+  <!-- Audio Call Button -->
+  <button onclick="startAudioCall()" class="absolute -top-32 right-0 bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white w-12 h-12 md:w-14 md:h-14 rounded-full shadow-xl hover:shadow-purple-500/50 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0" title="Audio Call">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+  </button>
+
+  <!-- Main Chat Button -->
+  <button onclick="toggleChat()" class="bg-gradient-to-br from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white w-14 h-14 md:w-16 md:h-16 rounded-full shadow-2xl hover:shadow-green-500/50 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
+    <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7 relative z-10"></i>
+    <span id="unreadBadge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse"></span>
+  </button>
+  
+  <!-- Tooltip -->
+  <div class="absolute bottom-full right-0 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+    <div class="bg-gray-900 text-white text-sm px-3 py-2 rounded-lg whitespace-nowrap">
+      Officials Group Chat
+    </div>
+  </div>
+</div>
+
+<!-- Chat Window (Hidden by default) -->
+<div id="chatWindow" class="hidden fixed bottom-24 right-6 z-50 w-80 md:w-96 bg-white rounded-2xl shadow-2xl border-2 border-gray-200 overflow-hidden animate-scaleIn">
+  <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+        <i data-lucide="users" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h3 class="font-bold">Officials Group Chat</h3>
+        <p class="text-xs text-green-100">Admin, Secretary, Tanod, Captain</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button onclick="startVideoCall()" class="hover:bg-white/20 p-2 rounded-lg transition-colors" title="Video Call">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+      </button>
+      <button onclick="startAudioCall()" class="hover:bg-white/20 p-2 rounded-lg transition-colors" title="Audio Call">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      </button>
+      <button onclick="toggleChat()" class="hover:bg-white/20 p-2 rounded-lg transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+  </div>
+  
+  <div id="chatMessages" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50">
+    <div class="text-center text-gray-500 text-sm py-4">
+      <i data-lucide="loader" class="w-5 h-5 inline animate-spin"></i>
+      Loading messages...
+    </div>
+  </div>
+  
+  <div class="p-4 border-t border-gray-200 bg-white">
+    <div class="flex gap-2">
+      <input type="text" id="chatInput" placeholder="Type your message..." class="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-sm" onkeypress="handleChatKeyPress(event)">
+      <button onclick="sendMessage()" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-2 rounded-lg transition-all hover:scale-105 active:scale-95">
+        <i data-lucide="send" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Video Call Modal -->
+<div id="videoCallModal" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center">
+  <div class="w-full h-full max-w-7xl mx-auto p-4 flex flex-col">
+    <!-- Call Header -->
+    <div class="flex items-center justify-between mb-4 text-white">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
+          <i data-lucide="users" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg">Officials Video Call</h3>
+          <p class="text-sm text-gray-300" id="callDuration">00:00</p>
+        </div>
+      </div>
+      <button onclick="endCall()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
+        <i data-lucide="phone-off" class="w-5 h-5"></i>
+        <span>End Call</span>
+      </button>
+    </div>
+
+    <!-- Video Grid -->
+    <div class="flex-1 grid grid-cols-2 gap-4 mb-4">
+      <div class="bg-gray-900 rounded-lg overflow-hidden relative">
+        <video id="remoteVideo" class="w-full h-full object-cover" autoplay playsinline></video>
+        <div class="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-2 rounded-lg text-sm">
+          <span id="remoteUserName">Waiting for others...</span>
+        </div>
+      </div>
+      <div class="bg-gray-900 rounded-lg overflow-hidden relative">
+        <video id="localVideo" class="w-full h-full object-cover" autoplay playsinline muted></video>
+        <div class="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-2 rounded-lg text-sm">
+          You
+        </div>
+      </div>
+    </div>
+
+    <!-- Call Controls -->
+    <div class="flex items-center justify-center gap-4">
+      <button id="toggleMicBtn" onclick="toggleMicrophone()" class="bg-gray-700 hover:bg-gray-600 w-14 h-14 rounded-full flex items-center justify-center transition-colors">
+        <i data-lucide="mic" class="w-6 h-6 text-white"></i>
+      </button>
+      <button id="toggleVideoBtn" onclick="toggleVideo()" class="bg-gray-700 hover:bg-gray-600 w-14 h-14 rounded-full flex items-center justify-center transition-colors">
+        <i data-lucide="video" class="w-6 h-6 text-white"></i>
+      </button>
+      <button onclick="toggleScreenShare()" class="bg-gray-700 hover:bg-gray-600 w-14 h-14 rounded-full flex items-center justify-center transition-colors">
+        <i data-lucide="monitor" class="w-6 h-6 text-white"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Call Modal -->
+<div id="audioCallModal" class="hidden fixed inset-0 z-[100] bg-gradient-to-br from-green-900 to-green-700 flex items-center justify-center">
+  <div class="text-center text-white">
+    <div class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+      <i data-lucide="phone" class="w-16 h-16"></i>
+    </div>
+    <h3 class="text-2xl font-bold mb-2">Officials Audio Call</h3>
+    <p class="text-lg mb-2" id="audioCallStatus">Connecting...</p>
+    <p class="text-sm text-green-200 mb-8" id="audioDuration">00:00</p>
+    
+    <audio id="remoteAudio" autoplay></audio>
+    <audio id="localAudio" muted></audio>
+
+    <div class="flex items-center justify-center gap-4">
+      <button id="toggleAudioMicBtn" onclick="toggleAudioMicrophone()" class="bg-white/20 hover:bg-white/30 w-16 h-16 rounded-full flex items-center justify-center transition-colors">
+        <i data-lucide="mic" class="w-8 h-8"></i>
+      </button>
+      <button onclick="endAudioCall()" class="bg-red-600 hover:bg-red-700 w-16 h-16 rounded-full flex items-center justify-center transition-colors">
+        <i data-lucide="phone-off" class="w-8 h-8"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Socket.io for real-time calls -->
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  // Socket.io connection
+  const socket = io();
+  
+  // Join the officials call room on connection
+  socket.on('connect', () => {
+    socket.emit('join-call', {
+      username: '{{user.username}}',
+      role: '{{user.role}}'
+    });
+  });
+  
+  let chatInterval = null;
+  let lastMessageCount = 0;
+  let isChatOpen = false;
+
+  // Chat functionality
+  function toggleChat() {
+    const chatWindow = document.getElementById('chatWindow');
+    isChatOpen = !chatWindow.classList.contains('hidden');
+    chatWindow.classList.toggle('hidden');
+    
+    if (!chatWindow.classList.contains('hidden')) {
+      isChatOpen = true;
+      document.getElementById('chatInput').focus();
+      loadMessages();
+      startChatPolling();
+      clearUnreadBadge();
+      setTimeout(() => lucide.createIcons(), 100);
+    } else {
+      isChatOpen = false;
+      stopChatPolling();
+    }
+  }
+
+  function loadMessages() {
+    fetch('/api/chat/messages')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          displayMessages(data.messages);
+          lastMessageCount = data.messages.length;
+        }
+      })
+      .catch(err => console.error('Error loading messages:', err));
+  }
+
+  function displayMessages(messages) {
+    const chatMessages = document.getElementById('chatMessages');
+    const currentUser = '{{user.username}}';
+    
+    if (messages.length === 0) {
+      chatMessages.innerHTML = `
+        <div class="text-center text-gray-500 text-sm py-8">
+          <i data-lucide="message-circle" class="w-12 h-12 mx-auto mb-2 text-gray-300"></i>
+          <p>No messages yet. Start the conversation!</p>
+        </div>
+      `;
+      setTimeout(() => lucide.createIcons(), 100);
+      return;
+    }
+
+    chatMessages.innerHTML = messages.map(msg => {
+      const isCurrentUser = msg.sender_name === currentUser;
+      const roleColor = getRoleColor(msg.sender_role);
+      const time = new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      
+      if (isCurrentUser) {
+        return `
+          <div class="flex gap-2 justify-end">
+            <div class="bg-green-600 text-white p-3 rounded-lg rounded-tr-none shadow-sm max-w-[80%]">
+              <p class="text-sm break-words">${escapeHtml(msg.message)}</p>
+              <span class="text-xs text-green-100 mt-1 block">${time}</span>
+            </div>
+            <div class="w-8 h-8 ${roleColor} rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-xs">
+              ${msg.sender_name.charAt(0).toUpperCase()}
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="flex gap-2">
+            <div class="w-8 h-8 ${roleColor} rounded-full flex items-center justify-center flex-shrink-0 text-white font-bold text-xs">
+              ${msg.sender_name.charAt(0).toUpperCase()}
+            </div>
+            <div class="bg-white p-3 rounded-lg rounded-tl-none shadow-sm max-w-[80%]">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-bold text-gray-800">${escapeHtml(msg.sender_name)}</span>
+                <span class="text-xs ${roleColor.replace('bg-', 'text-')} font-semibold">${msg.sender_role}</span>
+              </div>
+              <p class="text-sm text-gray-800 break-words">${escapeHtml(msg.message)}</p>
+              <span class="text-xs text-gray-500 mt-1 block">${time}</span>
+            </div>
+          </div>
+        `;
+      }
+    }).join('');
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    setTimeout(() => lucide.createIcons(), 100);
+  }
+
+  function getRoleColor(role) {
+    const colors = {
+      'Admin': 'bg-purple-600',
+      'Secretary': 'bg-blue-600',
+      'Tanod': 'bg-orange-600',
+      'Captain': 'bg-red-600'
+    };
+    return colors[role] || 'bg-gray-600';
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (message) {
+      fetch('/api/chat/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          input.value = '';
+          loadMessages();
+        } else {
+          alert('Failed to send message');
+        }
+      })
+      .catch(err => console.error('Error sending message:', err));
+    }
+  }
+
+  function handleChatKeyPress(event) {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  }
+
+  function startChatPolling() {
+    if (chatInterval) return;
+    chatInterval = setInterval(() => {
+      if (isChatOpen) {
+        loadMessages();
+      }
+    }, 3000); // Poll every 3 seconds
+  }
+
+  function stopChatPolling() {
+    if (chatInterval) {
+      clearInterval(chatInterval);
+      chatInterval = null;
+    }
+  }
+
+  function checkNewMessages() {
+    if (!isChatOpen) {
+      fetch('/api/chat/messages')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.messages.length > lastMessageCount) {
+            showUnreadBadge(data.messages.length - lastMessageCount);
+          }
+        })
+        .catch(err => console.error('Error checking messages:', err));
+    }
+  }
+
+  function showUnreadBadge(count) {
+    const badge = document.getElementById('unreadBadge');
+    badge.textContent = count > 9 ? '9+' : count;
+    badge.classList.remove('hidden');
+  }
+
+  function clearUnreadBadge() {
+    document.getElementById('unreadBadge').classList.add('hidden');
+  }
+
+  // Initialize chat on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    loadMessages();
+    // Check for new messages every 5 seconds when chat is closed
+    setInterval(checkNewMessages, 5000);
+  });
+
+  // Video/Audio Call Variables
+  let localStream = null;
+  let remoteStream = null;
+  let peerConnection = null;
+  let isMicOn = true;
+  let isVideoOn = true;
+  let isScreenSharing = false;
+  let callStartTime = null;
+  let callTimer = null;
+
+  // Start Video Call
+  async function startVideoCall() {
+    try {
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Your browser does not support camera/microphone access. Please use a modern browser like Chrome, Firefox, or Edge.');
+        return;
+      }
+
+      // Check if we're on HTTPS or localhost
+      if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        alert('Camera/microphone access requires HTTPS. Please access this site via HTTPS.');
+        return;
+      }
+
+      // Emit call initiation to server
+      socket.emit('initiate-call', {
+        type: 'video',
+        callerName: '{{user.username}}',
+        callerRole: '{{user.role}}'
+      });
+      
+      const modal = document.getElementById('videoCallModal');
+      modal.classList.remove('hidden');
+      
+      // Get user media
+      localStream = await navigator.mediaDevices.getUserMedia({ 
+        video: { width: { ideal: 1280 }, height: { ideal: 720 } }, 
+        audio: { echoCancellation: true, noiseSuppression: true }
+      });
+      
+      document.getElementById('localVideo').srcObject = localStream;
+      
+      // Show "Calling..." status
+      document.getElementById('remoteUserName').textContent = 'Calling...';
+      
+      // Start call timer
+      callStartTime = Date.now();
+      startCallTimer('callDuration');
+      
+      setTimeout(() => lucide.createIcons(), 100);
+    } catch (error) {
+      console.error('Error starting video call:', error);
+      
+      // Hide modal if it was shown
+      document.getElementById('videoCallModal').classList.add('hidden');
+      
+      // Provide specific error messages
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        alert('Camera/microphone access was denied. Please allow access in your browser settings and try again.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        alert('No camera or microphone found. Please connect a camera/microphone and try again.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        alert('Camera/microphone is already in use by another application. Please close other apps and try again.');
+      } else if (error.name === 'OverconstrainedError') {
+        alert('Camera does not meet the required specifications. Trying with lower quality...');
+        // Retry with lower constraints
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          document.getElementById('localVideo').srcObject = localStream;
+          document.getElementById('videoCallModal').classList.remove('hidden');
+        } catch (retryError) {
+          alert('Could not access camera/microphone even with lower quality settings.');
+        }
+      } else {
+        alert('Could not access camera/microphone: ' + error.message);
+      }
+    }
+  }
+
+  // Start Audio Call
+  async function startAudioCall() {
+    try {
+      // Check if getUserMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Your browser does not support microphone access. Please use a modern browser like Chrome, Firefox, or Edge.');
+        return;
+      }
+
+      // Check if we're on HTTPS or localhost
+      if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        alert('Microphone access requires HTTPS. Please access this site via HTTPS.');
+        return;
+      }
+
+      // Emit call initiation to server
+      socket.emit('initiate-call', {
+        type: 'audio',
+        callerName: '{{user.username}}',
+        callerRole: '{{user.role}}'
+      });
+      
+      const modal = document.getElementById('audioCallModal');
+      modal.classList.remove('hidden');
+      
+      // Get audio only
+      localStream = await navigator.mediaDevices.getUserMedia({ 
+        video: false, 
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+      });
+      
+      // Keep "Connecting..." status until someone answers
+      document.getElementById('audioCallStatus').textContent = 'Calling...';
+      
+      // Start call timer
+      callStartTime = Date.now();
+      startCallTimer('audioDuration');
+      
+      setTimeout(() => lucide.createIcons(), 100);
+    } catch (error) {
+      console.error('Error starting audio call:', error);
+      
+      // Hide modal if it was shown
+      document.getElementById('audioCallModal').classList.add('hidden');
+      
+      // Provide specific error messages
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        alert('Microphone access was denied. Please allow access in your browser settings and try again.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        alert('No microphone found. Please connect a microphone and try again.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        alert('Microphone is already in use by another application. Please close other apps and try again.');
+      } else {
+        alert('Could not access microphone: ' + error.message);
+      }
+    }
+  }
+
+  // Toggle Microphone (Video Call)
+  function toggleMicrophone() {
+    if (localStream) {
+      const audioTrack = localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        isMicOn = !isMicOn;
+        audioTrack.enabled = isMicOn;
+        
+        const btn = document.getElementById('toggleMicBtn');
+        if (isMicOn) {
+          btn.classList.remove('bg-red-600');
+          btn.classList.add('bg-gray-700');
+          btn.innerHTML = '<i data-lucide="mic" class="w-6 h-6 text-white"></i>';
+        } else {
+          btn.classList.remove('bg-gray-700');
+          btn.classList.add('bg-red-600');
+          btn.innerHTML = '<i data-lucide="mic-off" class="w-6 h-6 text-white"></i>';
+        }
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+    }
+  }
+
+  // Toggle Video
+  function toggleVideo() {
+    if (localStream) {
+      const videoTrack = localStream.getVideoTracks()[0];
+      if (videoTrack) {
+        isVideoOn = !isVideoOn;
+        videoTrack.enabled = isVideoOn;
+        
+        const btn = document.getElementById('toggleVideoBtn');
+        if (isVideoOn) {
+          btn.classList.remove('bg-red-600');
+          btn.classList.add('bg-gray-700');
+          btn.innerHTML = '<i data-lucide="video" class="w-6 h-6 text-white"></i>';
+        } else {
+          btn.classList.remove('bg-gray-700');
+          btn.classList.add('bg-red-600');
+          btn.innerHTML = '<i data-lucide="video-off" class="w-6 h-6 text-white"></i>';
+        }
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+    }
+  }
+
+  // Toggle Screen Share
+  async function toggleScreenShare() {
+    try {
+      // Check if getDisplayMedia is supported
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        alert('Screen sharing is not supported in your browser. Please use a modern browser like Chrome, Firefox, or Edge.');
+        return;
+      }
+
+      // Check if we're on HTTPS or localhost
+      if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        alert('Screen sharing requires HTTPS. Please access this site via HTTPS.');
+        return;
+      }
+
+      if (!isScreenSharing) {
+        const screenStream = await navigator.mediaDevices.getDisplayMedia({ 
+          video: true 
+        });
+        
+        const videoTrack = screenStream.getVideoTracks()[0];
+        const sender = localStream.getVideoTracks()[0];
+        
+        // Replace video track with screen share
+        document.getElementById('localVideo').srcObject = screenStream;
+        isScreenSharing = true;
+        
+        // Stop screen sharing when user clicks stop
+        videoTrack.onended = () => {
+          document.getElementById('localVideo').srcObject = localStream;
+          isScreenSharing = false;
+        };
+      } else {
+        document.getElementById('localVideo').srcObject = localStream;
+        isScreenSharing = false;
+      }
+    } catch (error) {
+      console.error('Error sharing screen:', error);
+      if (error.name === 'NotAllowedError') {
+        alert('Screen sharing permission was denied.');
+      } else {
+        alert('Could not share screen: ' + error.message);
+      }
+    }
+  }
+
+  // Toggle Audio Microphone (Audio Call)
+  function toggleAudioMicrophone() {
+    if (localStream) {
+      const audioTrack = localStream.getAudioTracks()[0];
+      if (audioTrack) {
+        isMicOn = !isMicOn;
+        audioTrack.enabled = isMicOn;
+        
+        const btn = document.getElementById('toggleAudioMicBtn');
+        if (isMicOn) {
+          btn.classList.remove('bg-red-600');
+          btn.classList.add('bg-white/20');
+          btn.innerHTML = '<i data-lucide="mic" class="w-8 h-8"></i>';
+        } else {
+          btn.classList.remove('bg-white/20');
+          btn.classList.add('bg-red-600');
+          btn.innerHTML = '<i data-lucide="mic-off" class="w-8 h-8"></i>';
+        }
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+    }
+  }
+
+  // End Video Call
+  function endCall() {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      localStream = null;
+    }
+    
+    document.getElementById('videoCallModal').classList.add('hidden');
+    stopCallTimer();
+    
+    // Reset states
+    isMicOn = true;
+    isVideoOn = true;
+    isScreenSharing = false;
+  }
+
+  // End Audio Call
+  function endAudioCall() {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      localStream = null;
+    }
+    
+    document.getElementById('audioCallModal').classList.add('hidden');
+    document.getElementById('audioCallStatus').textContent = 'Connecting...';
+    stopCallTimer();
+    
+    // Reset state
+    isMicOn = true;
+  }
+
+  // Call Timer
+  function startCallTimer(elementId) {
+    callTimer = setInterval(() => {
+      const elapsed = Date.now() - callStartTime;
+      const minutes = Math.floor(elapsed / 60000);
+      const seconds = Math.floor((elapsed % 60000) / 1000);
+      document.getElementById(elementId).textContent = 
+        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }, 1000);
+  }
+
+  function stopCallTimer() {
+    if (callTimer) {
+      clearInterval(callTimer);
+      callTimer = null;
+    }
+  }
+</script>
+
+
+<!-- Incoming Call Notification -->
+<div id="incomingCallNotification" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center animate-fadeIn">
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 animate-scaleIn">
+    <!-- Caller Avatar -->
+    <div class="text-center mb-6">
+      <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg animate-pulse">
+        <span id="callerInitial">?</span>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-1" id="callerName">Unknown Caller</h3>
+      <p class="text-sm text-gray-500 mb-2" id="callerRole">Official</p>
+      <div class="flex items-center justify-center gap-2 text-green-600">
+        <i data-lucide="phone-incoming" class="w-5 h-5 animate-bounce"></i>
+        <span class="text-lg font-semibold" id="callType">Incoming Call</span>
+      </div>
+    </div>
+
+    <!-- Ringtone Animation -->
+    <div class="flex justify-center gap-1 mb-6">
+      <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0s"></div>
+      <div class="w-1 h-12 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.1s"></div>
+      <div class="w-1 h-10 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.2s"></div>
+      <div class="w-1 h-14 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.3s"></div>
+      <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.4s"></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-4 justify-center">
+      <button onclick="declineCall()" class="bg-red-600 hover:bg-red-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-red-500/50 transition-all hover:scale-110 active:scale-95">
+        <i data-lucide="phone-off" class="w-8 h-8"></i>
+      </button>
+      <button onclick="acceptCall()" class="bg-green-600 hover:bg-green-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-green-500/50 transition-all hover:scale-110 active:scale-95 animate-pulse">
+        <i data-lucide="phone" class="w-8 h-8"></i>
+      </button>
+    </div>
+
+    <!-- Labels -->
+    <div class="flex justify-center gap-8 mt-4 text-sm text-gray-600">
+      <span>Decline</span>
+      <span>Accept</span>
+    </div>
+  </div>
+</div>
+
+<!-- Audio element for ringtone -->
+<audio id="ringtoneAudio" loop>
+  <source src="/sounds/ringtone.mp3" type="audio/mpeg">
+</audio>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from { 
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to { 
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes soundWave {
+    0%, 100% { 
+      height: 2rem;
+      opacity: 0.5;
+    }
+    50% { 
+      height: 3.5rem;
+      opacity: 1;
+    }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-scaleIn {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .animate-soundWave {
+    animation: soundWave 1s ease-in-out infinite;
+  }
+</style>
+
+<script>
+  let currentCallData = null;
+  let ringtoneAudio = null;
+
+  // Initialize ringtone audio
+  document.addEventListener('DOMContentLoaded', function() {
+    ringtoneAudio = document.getElementById('ringtoneAudio');
+  });
+
+  // Listen for incoming calls via Socket.io
+  socket.on('incoming-call', (callData) => {
+    showIncomingCallNotification(callData);
+  });
+
+  // Show incoming call notification
+  function showIncomingCallNotification(callData) {
+    currentCallData = callData;
+    
+    const notification = document.getElementById('incomingCallNotification');
+    const callerInitial = document.getElementById('callerInitial');
+    const callerName = document.getElementById('callerName');
+    const callerRole = document.getElementById('callerRole');
+    const callType = document.getElementById('callType');
+    
+    // Set caller information
+    callerInitial.textContent = callData.callerName.charAt(0).toUpperCase();
+    callerName.textContent = callData.callerName;
+    callerRole.textContent = callData.callerRole;
+    callType.textContent = callData.type === 'video' ? 'Incoming Video Call' : 'Incoming Audio Call';
+    
+    // Update icon based on call type
+    const icon = callType.querySelector('i');
+    if (callData.type === 'video') {
+      icon.setAttribute('data-lucide', 'video');
+    } else {
+      icon.setAttribute('data-lucide', 'phone-incoming');
+    }
+    
+    // Show notification
+    notification.classList.remove('hidden');
+    
+    // Play ringtone
+    if (ringtoneAudio) {
+      ringtoneAudio.play().catch(err => console.log('Ringtone play failed:', err));
+    }
+    
+    // Refresh icons
+    setTimeout(() => lucide.createIcons(), 100);
+    
+    // Show browser notification if permission granted
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(`${callData.callerName} is calling`, {
+        body: `${callData.type === 'video' ? 'Video' : 'Audio'} call from ${callData.callerRole}`,
+        icon: '/icons/icon-192x192.png',
+        tag: 'incoming-call',
+        requireInteraction: true
+      });
+    }
+  }
+
+  // Accept call
+  function acceptCall() {
+    if (!currentCallData) return;
+    
+    // Hide notification
+    hideIncomingCallNotification();
+    
+    // Emit accept event to server
+    socket.emit('call-accepted', {
+      callId: currentCallData.callId,
+      callerId: currentCallData.callerId
+    });
+    
+    // Start appropriate call type
+    if (currentCallData.type === 'video') {
+      startVideoCall();
+    } else {
+      startAudioCall();
+    }
+    
+    currentCallData = null;
+  }
+
+  // Decline call
+  function declineCall() {
+    if (!currentCallData) return;
+    
+    // Hide notification
+    hideIncomingCallNotification();
+    
+    // Emit decline event to server
+    socket.emit('call-declined', {
+      callId: currentCallData.callId,
+      callerId: currentCallData.callerId
+    });
+    
+    currentCallData = null;
+  }
+
+  // Hide incoming call notification
+  function hideIncomingCallNotification() {
+    const notification = document.getElementById('incomingCallNotification');
+    notification.classList.add('hidden');
+    
+    // Stop ringtone
+    if (ringtoneAudio) {
+      ringtoneAudio.pause();
+      ringtoneAudio.currentTime = 0;
+    }
+  }
+
+  // Request notification permission on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  });
+
+  // Auto-decline after 30 seconds
+  let callTimeout = null;
+  socket.on('incoming-call', (callData) => {
+    if (callTimeout) clearTimeout(callTimeout);
+    
+    callTimeout = setTimeout(() => {
+      if (currentCallData && currentCallData.callId === callData.callId) {
+        declineCall();
+      }
+    }, 30000); // 30 seconds
+  });
+</script>
+

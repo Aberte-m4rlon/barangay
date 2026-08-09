@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Ringtone - BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+{{> head }}
+
+<section class="py-12 px-4">
+  <div class="max-w-3xl mx-auto">
+    
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h1 class="text-3xl font-bold gradient-text mb-4 flex items-center gap-3">
+        <i data-lucide="phone" class="w-8 h-8"></i>
+        📞 Generate Ringtone
+      </h1>
+      <p class="text-gray-600">This tool generates a simple ringtone for incoming calls.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="music" class="w-6 h-6 text-purple-600"></i>
+        Option 1: Generate Simple Ringtone
+      </h2>
+      <p class="text-gray-600 mb-4">Click to generate and preview a simple phone ringtone:</p>
+      <button onclick="generateAndPlayRingtone()" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2">
+        <i data-lucide="play" class="w-5 h-5"></i>
+        Generate & Preview Ringtone
+      </button>
+      <div id="status" class="mt-4"></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="bell" class="w-6 h-6 text-blue-600"></i>
+        Option 2: Use Browser Beep
+      </h2>
+      <p class="text-gray-600 mb-4">The system can use the browser's default notification sound instead.</p>
+      <div class="bg-blue-50 border-l-4 border-blue-600 text-blue-800 p-4 rounded">
+        <strong>Note:</strong> If you don't add a ringtone file, the incoming call modal will still work with visual notifications only.
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="upload" class="w-6 h-6 text-green-600"></i>
+        Option 3: Upload Your Own
+      </h2>
+      <p class="text-gray-600 mb-4">You can upload any MP3 file as a ringtone:</p>
+      <ol class="list-decimal list-inside space-y-2 text-gray-700">
+        <li>Find or create an MP3 ringtone</li>
+        <li>Name it <code class="bg-gray-100 px-2 py-1 rounded">ringtone.mp3</code></li>
+        <li>Upload it to <code class="bg-gray-100 px-2 py-1 rounded">public/sounds/ringtone.mp3</code></li>
+        <li>Restart your server</li>
+      </ol>
+    </div>
+
+    <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl shadow-lg p-8 border-2 border-green-200">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="info" class="w-6 h-6 text-green-600"></i>
+        📋 Instructions
+      </h2>
+      <div class="bg-white p-6 rounded-lg border-2 border-gray-200">
+        <strong class="block mb-3 text-lg">To add a ringtone:</strong>
+        <ol class="list-decimal list-inside space-y-3 text-gray-700">
+          <li>Download a free ringtone from:
+            <ul class="list-disc list-inside ml-6 mt-2 space-y-1">
+              <li><a href="https://www.zedge.net/ringtones" target="_blank" class="text-blue-600 hover:underline">Zedge</a></li>
+              <li><a href="https://mixkit.co/free-sound-effects/phone/" target="_blank" class="text-blue-600 hover:underline">Mixkit</a></li>
+              <li><a href="https://www.freesound.org/" target="_blank" class="text-blue-600 hover:underline">Freesound</a></li>
+            </ul>
+          </li>
+          <li>Save it as <code class="bg-gray-100 px-2 py-1 rounded">ringtone.mp3</code></li>
+          <li>Upload to <code class="bg-gray-100 px-2 py-1 rounded">public/sounds/ringtone.mp3</code> on your server</li>
+          <li>Restart your server</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{{> footer }}
+
+<script>
+  lucide.createIcons();
+  
+  let audioContext = null;
+  let ringtoneBuffer = null;
+  let source = null;
+
+  async function generateAndPlayRingtone() {
+    const statusDiv = document.getElementById('status');
+    statusDiv.innerHTML = '<div class="bg-blue-100 border-l-4 border-blue-600 text-blue-800 p-4 rounded">⏳ Generating ringtone...</div>';
+
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      const sampleRate = audioContext.sampleRate;
+      const duration = 2;
+      const buffer = audioContext.createBuffer(1, sampleRate * duration, sampleRate);
+      const data = buffer.getChannelData(0);
+      
+      const freq1 = 440;
+      const freq2 = 554;
+      
+      for (let i = 0; i < data.length; i++) {
+        const t = i / sampleRate;
+        const segment = Math.floor(t * 4);
+        
+        if (segment % 2 === 0) {
+          data[i] = Math.sin(2 * Math.PI * freq1 * t) * 0.3;
+        } else {
+          data[i] = Math.sin(2 * Math.PI * freq2 * t) * 0.3;
+        }
+        
+        const segmentTime = (t * 4) % 1;
+        if (segmentTime < 0.1) {
+          data[i] *= segmentTime / 0.1;
+        } else if (segmentTime > 0.9) {
+          data[i] *= (1 - segmentTime) / 0.1;
+        }
+      }
+      
+      ringtoneBuffer = buffer;
+      playRingtone();
+      
+      statusDiv.innerHTML = `
+        <div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded">
+          <strong>✅ Ringtone generated and playing!</strong>
+          <div class="mt-4 flex gap-2">
+            <button onclick="playRingtone()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all">
+              <i data-lucide="play" class="w-4 h-4 inline"></i> Play Again
+            </button>
+            <button onclick="stopRingtone()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all">
+              <i data-lucide="stop-circle" class="w-4 h-4 inline"></i> Stop
+            </button>
+          </div>
+          <div class="mt-4 text-sm">
+            <strong>Note:</strong> This is a simple generated ringtone. For better quality, 
+            upload a professional ringtone MP3 file to <code class="bg-gray-100 px-2 py-1 rounded">public/sounds/ringtone.mp3</code>
+          </div>
+        </div>
+      `;
+      setTimeout(() => lucide.createIcons(), 100);
+    } catch (error) {
+      statusDiv.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Error generating ringtone:</strong> ' + error.message + '</div>';
+    }
+  }
+
+  function playRingtone() {
+    if (!ringtoneBuffer || !audioContext) return;
+    stopRingtone();
+    source = audioContext.createBufferSource();
+    source.buffer = ringtoneBuffer;
+    source.loop = true;
+    source.connect(audioContext.destination);
+    source.start(0);
+  }
+
+  function stopRingtone() {
+    if (source) {
+      try {
+        source.stop();
+      } catch (e) {}
+      source = null;
+    }
+  }
+
+  window.addEventListener('beforeunload', stopRingtone);
+</script>
+
+</body>
+</html>

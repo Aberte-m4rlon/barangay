@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barangay Officials | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-green-50 text-gray-800 font-sans">
+
+  {{> head }}
+  {{> navbar }}
+
+  <!-- Page Header -->
+  <section class="bg-gradient-to-r from-green-600 to-green-800 py-6 md:py-10 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-center md:text-left">
+        <div class="flex items-center justify-center md:justify-start gap-3 mb-2">
+          <i data-lucide="users" class="w-8 h-8 md:w-10 md:h-10 text-white"></i>
+          <h1 class="text-2xl md:text-4xl font-extrabold text-white">Barangay Officials</h1>
+        </div>
+        <p class="text-sm md:text-base text-green-100">Manage and view all barangay officials</p>
+      </div>
+      <button id="openAddOfficialBtn" class="btn-ripple inline-flex items-center gap-2 bg-white text-green-800 hover:bg-green-50 px-5 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        Add Official
+      </button>
+    </div>
+  </section>
+
+  <!-- Officials Grid -->
+  <section class="max-w-7xl mx-auto px-4 py-6 md:py-10 animate-fadeIn">
+    {{#if officials.length}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      {{#each officials}}
+      <div class="bg-white rounded-2xl shadow-lg border-2 border-gray-200 hover:border-green-400 p-4 md:p-6 hover-lift card-glow transition-all duration-300">
+        <!-- Card Header -->
+        <div class="text-center mb-4">
+          <div class="bg-gradient-to-br from-green-100 to-green-200 p-4 rounded-full w-20 h-20 mx-auto mb-3 flex items-center justify-center">
+            <i data-lucide="user" class="w-10 h-10 text-green-700"></i>
+          </div>
+          <h3 class="text-lg font-bold text-gray-800 mb-2">{{this.username}}</h3>
+          <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold">{{this.role}}</span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="space-y-3 mb-4">
+          <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 p-2 rounded-lg">
+            <i data-lucide="mail" class="w-4 h-4 text-green-600 flex-shrink-0"></i>
+            <span class="truncate">{{this.email}}</span>
+          </div>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="pt-4 border-t border-gray-200">
+          <form action="/admin/delete-user/{{this._id}}" method="POST" onsubmit="return confirm('Are you sure you want to remove {{this.username}}?');" class="w-full">
+            <button type="submit" class="btn-ripple w-full inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 text-sm rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-105 font-semibold">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+              Remove
+            </button>
+          </form>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    {{else}}
+    <div class="text-center py-16 bg-white rounded-2xl shadow-lg">
+      <i data-lucide="users-x" class="w-20 h-20 text-gray-300 mx-auto mb-4"></i>
+      <h3 class="text-xl font-bold text-gray-700 mb-2">No Officials Yet</h3>
+      <p class="text-gray-500 mb-6">Start by adding your first barangay official</p>
+      <button id="openAddOfficialBtn2" class="btn-ripple inline-flex items-center gap-2 bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
+        <i data-lucide="user-plus" class="w-5 h-5"></i>
+        Add First Official
+      </button>
+    </div>
+    {{/if}}
+  </section>
+
+  <!-- ✅ Modal for Add Barangay Official -->
+  <div id="addOfficialModal" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-2 md:p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl md:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto animate-scaleIn">
+      <div class="sticky top-0 bg-gradient-to-r from-green-600 via-green-700 to-green-800 text-white p-4 md:p-6 rounded-t-2xl md:rounded-t-3xl flex justify-between items-center shadow-lg">
+        <h2 class="text-lg md:text-2xl font-extrabold flex items-center gap-2">
+          <i data-lucide="user-plus" class="w-5 h-5 md:w-6 md:h-6"></i> Add Official
+        </h2>
+        <button id="closeModalBtn" class="text-white hover:text-gray-200 transition-all hover:scale-110">
+          <i data-lucide="x" class="w-6 h-6 md:w-7 md:h-7"></i>
+        </button>
+      </div>
+
+      <form action="/add-user" method="POST" class="p-4 md:p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div>
+            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2 flex items-center gap-1">
+              <i data-lucide="user" class="w-3 h-3 md:w-4 md:h-4 text-green-700"></i>
+              Full Name
+            </label>
+            <input type="text" name="username" class="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none" required>
+          </div>
+          <div>
+            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2 flex items-center gap-1">
+              <i data-lucide="mail" class="w-3 h-3 md:w-4 md:h-4 text-green-700"></i>
+              Email
+            </label>
+            <input type="email" name="email" class="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none" required>
+          </div>
+          <div>
+            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2 flex items-center gap-1">
+              <i data-lucide="lock" class="w-3 h-3 md:w-4 md:h-4 text-green-700"></i>
+              Password
+            </label>
+            <input type="password" name="password" class="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none" required>
+          </div>
+          <div>
+            <label class="block text-xs md:text-sm font-semibold text-gray-700 mb-1 md:mb-2 flex items-center gap-1">
+              <i data-lucide="briefcase" class="w-3 h-3 md:w-4 md:h-4 text-green-700"></i>
+              Select Role
+            </label>
+            <select name="role" class="w-full px-3 py-2 md:px-4 md:py-3 text-sm md:text-base border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none">
+              <option value="Kagawad">Kagawad</option>
+              <option value="Secretary">Secretary</option>
+              <option value="Treasurer">Treasurer</option>
+              <option value="Captain">Captain</option>
+              <option value="SK Chairman">SK Chairman</option>
+              <option value="Tanod">Tanod</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-6 md:mt-8 flex gap-2 md:gap-4 justify-end">
+          <button type="button" id="cancelBtn" class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border-2 border-gray-300 rounded-xl hover:bg-gray-100 transition-all font-semibold">Cancel</button>
+          <button type="submit" class="btn-ripple bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-xl shadow-lg hover:shadow-xl transition-all font-bold">Add Official</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {{> footer }}
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal functionality
+      const modal = document.getElementById('addOfficialModal');
+      const openBtn = document.getElementById('openAddOfficialBtn');
+      const openBtn2 = document.getElementById('openAddOfficialBtn2');
+      const closeBtn = document.getElementById('closeModalBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      function openModal() {
+        modal.classList.remove('hidden');
+        setTimeout(() => lucide.createIcons(), 100);
+      }
+
+      function closeModal() {
+        modal.classList.add('hidden');
+      }
+
+      if (openBtn) {
+        openBtn.addEventListener('click', openModal);
+      }
+
+      if (openBtn2) {
+        openBtn2.addEventListener('click', openModal);
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+      }
+
+      // Close modal when clicking outside
+      if (modal) {
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+      }
+
+      // Reinitialize icons
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRTC Test - BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
+
+{{> head }}
+
+<section class="py-12 px-4">
+  <div class="max-w-4xl mx-auto">
+    
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h1 class="text-3xl font-bold gradient-text mb-4">🎥 WebRTC Compatibility Test</h1>
+      <p class="text-gray-600">This page tests if your browser and connection support video/audio calls.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="monitor" class="w-6 h-6 text-blue-600"></i>
+        1. Browser Compatibility
+      </h2>
+      <div id="browserTest"></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="shield-check" class="w-6 h-6 text-green-600"></i>
+        2. HTTPS Check
+      </h2>
+      <div id="httpsTest"></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="video" class="w-6 h-6 text-purple-600"></i>
+        3. Camera & Microphone Test
+      </h2>
+      <button onclick="testMedia()" class="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2">
+        <i data-lucide="play" class="w-5 h-5"></i>
+        Test Camera & Microphone
+      </button>
+      <div id="mediaTest" class="mt-4"></div>
+      <video id="testVideo" autoplay muted playsinline class="hidden w-full max-w-md rounded-lg mt-4"></video>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="wifi" class="w-6 h-6 text-orange-600"></i>
+        4. WebRTC Connection Test
+      </h2>
+      <button onclick="testWebRTC()" class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2">
+        <i data-lucide="play" class="w-5 h-5"></i>
+        Test WebRTC Connection
+      </button>
+      <div id="webrtcTest" class="mt-4"></div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="radio" class="w-6 h-6 text-red-600"></i>
+        5. Socket.IO Test
+      </h2>
+      <button onclick="testSocketIO()" class="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-3 rounded-lg font-semibold transition-all hover:scale-105 flex items-center gap-2">
+        <i data-lucide="play" class="w-5 h-5"></i>
+        Test Socket.IO Connection
+      </button>
+      <div id="socketTest" class="mt-4"></div>
+    </div>
+
+    <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl shadow-lg p-8 border-2 border-green-200">
+      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+        <i data-lucide="bar-chart" class="w-6 h-6 text-green-600"></i>
+        📊 Test Summary
+      </h2>
+      <div id="summary"></div>
+    </div>
+
+  </div>
+</section>
+
+{{> footer }}
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  lucide.createIcons();
+  
+  let testResults = {
+    browser: false,
+    https: false,
+    media: false,
+    webrtc: false,
+    socket: false
+  };
+
+  function testBrowser() {
+    const browserTest = document.getElementById('browserTest');
+    const hasGetUserMedia = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    const hasRTCPeerConnection = !!(window.RTCPeerConnection);
+    
+    if (hasGetUserMedia && hasRTCPeerConnection) {
+      browserTest.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded"><strong>✅ Your browser supports WebRTC!</strong></div>';
+      testResults.browser = true;
+    } else {
+      browserTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Your browser does not support WebRTC.</strong><br>Please use Chrome, Firefox, Edge, or Safari.</div>';
+    }
+    updateSummary();
+  }
+
+  function testHTTPS() {
+    const httpsTest = document.getElementById('httpsTest');
+    const isHTTPS = location.protocol === 'https:';
+    const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    
+    if (isHTTPS || isLocalhost) {
+      httpsTest.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded"><strong>✅ Connection is secure</strong><br>Protocol: ' + location.protocol + '</div>';
+      testResults.https = true;
+    } else {
+      httpsTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ HTTPS is required</strong><br>Current: ' + location.protocol + '</div>';
+    }
+    updateSummary();
+  }
+
+  async function testMedia() {
+    const mediaTest = document.getElementById('mediaTest');
+    const video = document.getElementById('testVideo');
+    
+    mediaTest.innerHTML = '<div class="bg-blue-100 border-l-4 border-blue-600 text-blue-800 p-4 rounded">⏳ Requesting camera and microphone access...</div>';
+    
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      video.srcObject = stream;
+      video.classList.remove('hidden');
+      
+      mediaTest.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded"><strong>✅ Camera and microphone access granted!</strong><br>Video devices: ' + stream.getVideoTracks().length + '<br>Audio devices: ' + stream.getAudioTracks().length + '</div>';
+      testResults.media = true;
+      
+      setTimeout(() => {
+        stream.getTracks().forEach(track => track.stop());
+        video.classList.add('hidden');
+      }, 5000);
+    } catch (error) {
+      let errorMsg = 'Error: ' + error.name;
+      if (error.name === 'NotAllowedError') errorMsg = 'Permission denied. Please allow camera/microphone access.';
+      else if (error.name === 'NotFoundError') errorMsg = 'No camera or microphone found.';
+      else if (error.name === 'NotReadableError') errorMsg = 'Camera/microphone is already in use.';
+      
+      mediaTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ ' + errorMsg + '</strong></div>';
+      testResults.media = false;
+    }
+    updateSummary();
+  }
+
+  async function testWebRTC() {
+    const webrtcTest = document.getElementById('webrtcTest');
+    webrtcTest.innerHTML = '<div class="bg-blue-100 border-l-4 border-blue-600 text-blue-800 p-4 rounded">⏳ Testing WebRTC connection...</div>';
+    
+    try {
+      const pc = new RTCPeerConnection({
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+      });
+      
+      const dc = pc.createDataChannel('test');
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      
+      await new Promise((resolve) => {
+        if (pc.iceGatheringState === 'complete') resolve();
+        else {
+          pc.addEventListener('icegatheringstatechange', () => {
+            if (pc.iceGatheringState === 'complete') resolve();
+          });
+        }
+        setTimeout(resolve, 5000);
+      });
+      
+      const candidates = pc.localDescription.sdp.match(/a=candidate:.+/g) || [];
+      
+      webrtcTest.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded"><strong>✅ WebRTC connection test passed!</strong><br>ICE candidates gathered: ' + candidates.length + '</div>';
+      testResults.webrtc = true;
+      
+      pc.close();
+    } catch (error) {
+      webrtcTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ WebRTC test failed:</strong> ' + error.message + '</div>';
+      testResults.webrtc = false;
+    }
+    updateSummary();
+  }
+
+  function testSocketIO() {
+    const socketTest = document.getElementById('socketTest');
+    socketTest.innerHTML = '<div class="bg-blue-100 border-l-4 border-blue-600 text-blue-800 p-4 rounded">⏳ Testing Socket.IO connection...</div>';
+    
+    try {
+      if (typeof io === 'undefined') {
+        socketTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Socket.IO library not loaded</strong></div>';
+        testResults.socket = false;
+      } else {
+        const socket = io();
+        
+        socket.on('connect', () => {
+          socketTest.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded"><strong>✅ Socket.IO connected!</strong><br>Socket ID: ' + socket.id + '</div>';
+          testResults.socket = true;
+          updateSummary();
+          socket.disconnect();
+        });
+        
+        socket.on('connect_error', (error) => {
+          socketTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Socket.IO connection failed:</strong> ' + error.message + '</div>';
+          testResults.socket = false;
+          updateSummary();
+        });
+        
+        setTimeout(() => {
+          if (!testResults.socket) {
+            socketTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Socket.IO connection timeout</strong></div>';
+            updateSummary();
+          }
+        }, 5000);
+      }
+    } catch (error) {
+      socketTest.innerHTML = '<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 rounded"><strong>❌ Socket.IO test failed:</strong> ' + error.message + '</div>';
+      testResults.socket = false;
+      updateSummary();
+    }
+  }
+
+  function updateSummary() {
+    const summary = document.getElementById('summary');
+    const total = Object.keys(testResults).length;
+    const passed = Object.values(testResults).filter(v => v).length;
+    const percentage = Math.round((passed / total) * 100);
+    
+    let statusClass = 'bg-green-100 border-green-600 text-green-800';
+    let statusText = 'All tests passed! ';
+    
+    if (percentage < 100) {
+      statusClass = percentage >= 60 ? 'bg-yellow-100 border-yellow-600 text-yellow-800' : 'bg-red-100 border-red-600 text-red-800';
+      statusText = 'Some tests failed. ';
+    }
+    
+    summary.innerHTML = `
+      <div class="${statusClass} border-l-4 p-4 rounded mb-4">
+        <strong>${statusText}(${passed}/${total} tests passed - ${percentage}%)</strong>
+      </div>
+      <div class="bg-white p-4 rounded border-2 border-gray-200">
+        <strong class="block mb-2">Test Results:</strong>
+        <div class="space-y-1">
+          <div>${testResults.browser ? '✅' : '❌'} Browser Compatibility</div>
+          <div>${testResults.https ? '✅' : '❌'} HTTPS Check</div>
+          <div>${testResults.media ? '✅' : '❌'} Camera & Microphone</div>
+          <div>${testResults.webrtc ? '✅' : '❌'} WebRTC Connection</div>
+          <div>${testResults.socket ? '✅' : '❌'} Socket.IO Connection</div>
+        </div>
+      </div>
+      ${percentage === 100 ? 
+        '<div class="bg-green-100 border-l-4 border-green-600 text-green-800 p-4 rounded mt-4"><strong>🎉 Your system is ready for video/audio calls!</strong></div>' :
+        '<div class="bg-yellow-100 border-l-4 border-yellow-600 text-yellow-800 p-4 rounded mt-4"><strong>⚠️ Please fix the failed tests before using video/audio calls.</strong></div>'
+      }
+    `;
+    setTimeout(() => lucide.createIcons(), 100);
+  }
+
+  window.addEventListener('load', () => {
+    testBrowser();
+    testHTTPS();
+    updateSummary();
+  });
+</script>
+
+</body>
+</html>

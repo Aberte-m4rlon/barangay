@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Incoming Call Notification</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes soundWave {
+      0%, 100% { height: 2rem; opacity: 0.5; }
+      50% { height: 3.5rem; opacity: 1; }
+    }
+    .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+    .animate-scaleIn { animation: scaleIn 0.3s ease-out; }
+    .animate-soundWave { animation: soundWave 1s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  
+  <div class="text-center">
+    <h1 class="text-3xl font-bold mb-4">Incoming Call Notification Test</h1>
+    <p class="text-gray-600 mb-8">Click the buttons below to test different call types</p>
+    
+    <div class="flex gap-4 justify-center">
+      <button onclick="testVideoCall()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg">
+        Test Video Call
+      </button>
+      <button onclick="testAudioCall()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg">
+        Test Audio Call
+      </button>
+    </div>
+  </div>
+
+  <!-- Incoming Call Notification -->
+  <div id="incomingCallNotification" class="hidden fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center animate-fadeIn">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 animate-scaleIn">
+      <div class="text-center mb-6">
+        <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white text-3xl font-bold shadow-lg animate-pulse">
+          <span id="callerInitial">J</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-800 mb-1" id="callerName">Juan Dela Cruz</h3>
+        <p class="text-sm text-gray-500 mb-2" id="callerRole">Captain</p>
+        <div class="flex items-center justify-center gap-2 text-green-600">
+          <i data-lucide="phone-incoming" class="w-5 h-5 animate-bounce"></i>
+          <span class="text-lg font-semibold" id="callType">Incoming Call</span>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-1 mb-6">
+        <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0s"></div>
+        <div class="w-1 h-12 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.1s"></div>
+        <div class="w-1 h-10 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.2s"></div>
+        <div class="w-1 h-14 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.3s"></div>
+        <div class="w-1 h-8 bg-green-500 rounded-full animate-soundWave" style="animation-delay: 0.4s"></div>
+      </div>
+
+      <div class="flex gap-4 justify-center">
+        <button onclick="declineCall()" class="bg-red-600 hover:bg-red-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-red-500/50 transition-all hover:scale-110 active:scale-95">
+          <i data-lucide="phone-off" class="w-8 h-8"></i>
+        </button>
+        <button onclick="acceptCall()" class="bg-green-600 hover:bg-green-700 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:shadow-green-500/50 transition-all hover:scale-110 active:scale-95 animate-pulse">
+          <i data-lucide="phone" class="w-8 h-8"></i>
+        </button>
+      </div>
+
+      <div class="flex justify-center gap-8 mt-4 text-sm text-gray-600">
+        <span>Decline</span>
+        <span>Accept</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function testVideoCall() {
+      showNotification('video');
+    }
+
+    function testAudioCall() {
+      showNotification('audio');
+    }
+
+    function showNotification(type) {
+      const notification = document.getElementById('incomingCallNotification');
+      const callType = document.getElementById('callType');
+      const icon = callType.querySelector('i');
+      
+      if (type === 'video') {
+        callType.textContent = 'Incoming Video Call';
+        icon.setAttribute('data-lucide', 'video');
+      } else {
+        callType.textContent = 'Incoming Audio Call';
+        icon.setAttribute('data-lucide', 'phone-incoming');
+      }
+      
+      callType.prepend(icon);
+      notification.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function acceptCall() {
+      alert('Call Accepted! 📞');
+      hideNotification();
+    }
+
+    function declineCall() {
+      alert('Call Declined! ❌');
+      hideNotification();
+    }
+
+    function hideNotification() {
+      document.getElementById('incomingCallNotification').classList.add('hidden');
+    }
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

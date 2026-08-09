@@ -1,0 +1,44 @@
+{
+  "name": "barangay",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "xian-start": "node index.js",
+    "xian": "nodemon index.js",
+    "migrate": "node migrate.js",
+    "create-db": "node create-database.js",
+    "setup-mysql": "node setup-mysql.js",
+    "create-captain": "node create-captain.js",
+    "create:model": "node create.js model",
+    "create:controller": "node create.js controller",
+    "deploy:setup": "node create-database.js && node setup-mysql.js",
+    "production": "NODE_ENV=production node index.js",
+    "check": "node check-production.js",
+    "fix-db": "node fix-database.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.3",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.17.3",
+    "hbs": "^4.2.0",
+    "inquirer": "^9.2.15",
+    "mongoose": "^8.19.3",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^7.0.10",
+    "sequelize": "^6.37.7",
+    "socket.io": "^4.7.2",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16"
+  }
+}

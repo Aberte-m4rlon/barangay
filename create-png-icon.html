@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create PNG Icons</title>
+</head>
+<body>
+    <h1>Creating PNG Icons...</h1>
+    <canvas id="canvas192" width="192" height="192"></canvas>
+    <canvas id="canvas512" width="512" height="512"></canvas>
+    <div id="links"></div>
+
+    <script>
+        function createIcon(size) {
+            const canvas = document.getElementById('canvas' + size);
+            const ctx = canvas.getContext('2d');
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#16a34a');
+            gradient.addColorStop(1, '#15803d');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Shield
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const shieldSize = size * 0.6;
+            
+            ctx.moveTo(centerX, centerY - shieldSize/2);
+            ctx.lineTo(centerX + shieldSize/2, centerY - shieldSize/4);
+            ctx.lineTo(centerX + shieldSize/2, centerY + shieldSize/4);
+            ctx.lineTo(centerX, centerY + shieldSize/2);
+            ctx.lineTo(centerX - shieldSize/2, centerY + shieldSize/4);
+            ctx.lineTo(centerX - shieldSize/2, centerY - shieldSize/4);
+            ctx.closePath();
+            ctx.fill();
+
+            // Text
+            ctx.fillStyle = '#16a34a';
+            ctx.font = `bold ${size * 0.15}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('BORS', centerX, centerY);
+
+            // Create download link
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                a.textContent = `Download icon-${size}x${size}.png`;
+                a.style.display = 'block';
+                a.style.margin = '10px';
+                a.style.padding = '10px';
+                a.style.background = '#16a34a';
+                a.style.color = 'white';
+                a.style.textDecoration = 'none';
+                a.style.borderRadius = '5px';
+                document.getElementById('links').appendChild(a);
+            });
+        }
+
+        createIcon(192);
+        createIcon(512);
+    </script>
+</body>
+</html>

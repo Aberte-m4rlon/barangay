@@ -1,0 +1,16 @@
+.vercel
+node_modules/
+.env
+.env.*
+!.env.production.example
+public/uploads/
+public/uploads/**
+data/
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.pptx
+*.zip
+*.rar
+

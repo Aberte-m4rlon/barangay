@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{announcement.title}} | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+  {{> head }}
+
+  <!-- Back Button -->
+  <div class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <a href="/public/announcements" class="inline-flex items-center gap-2 text-gray-600 hover:text-green-700 font-medium transition-colors">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        Back to Announcements
+      </a>
+    </div>
+  </div>
+
+  <!-- Announcement Content -->
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header -->
+    <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-8">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+          <i data-lucide="user" class="w-6 h-6 text-green-700"></i>
+        </div>
+        <div>
+          <div class="font-bold text-gray-900">{{announcement.posted_by}}</div>
+          <div class="text-sm text-gray-500 flex items-center gap-2">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            {{announcement.date_posted}}
+          </div>
+        </div>
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
+        {{announcement.title}}
+      </h1>
+
+      <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed mb-8">
+        {{announcement.message}}
+      </div>
+
+      <!-- Media Gallery -->
+      {{#if announcement.media.length}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {{#each announcement.media}}
+            {{#if (or (endsWith this ".jpg") (endsWith this ".jpeg") (endsWith this ".png") (endsWith this ".gif") (endsWith this ".webp"))}}
+              <img src="/uploads/{{this}}" class="rounded-xl w-full object-cover shadow-lg hover:shadow-2xl transition-shadow cursor-pointer" alt="Announcement media" onclick="openImageModal(this.src)">
+            {{else if (or (endsWith this ".mp4") (endsWith this ".mov") (endsWith this ".avi") (endsWith this ".webm") (endsWith this ".mkv"))}}
+              <video controls class="rounded-xl w-full object-cover shadow-lg bg-black" preload="metadata">
+                <source src="/uploads/{{this}}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {{/if}}
+          {{/each}}
+        </div>
+      {{/if}}
+
+      <!-- Stats -->
+      <div class="flex items-center gap-6 pt-6 border-t border-gray-200">
+        <div class="flex items-center gap-2 text-gray-600">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span class="font-semibold">{{comments.length}}</span>
+          <span class="text-sm">Comments</span>
+        </div>
+        {{#if announcement.media.length}}
+          <div class="flex items-center gap-2 text-gray-600">
+            <i data-lucide="image" class="w-5 h-5"></i>
+            <span class="font-semibold">{{announcement.media.length}}</span>
+            <span class="text-sm">Media</span>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div id="comments" class="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+        <i data-lucide="message-square" class="w-7 h-7 text-green-700"></i>
+        Comments ({{comments.length}})
+      </h2>
+
+      <!-- Comment Form -->
+      {{#if user}}
+        <form action="/public/announcement/{{announcement.id}}/comment" method="POST" class="mb-8 bg-gray-50 rounded-xl p-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">Leave a Comment</h3>
+          
+          <div class="grid md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="commenter_name" class="block text-sm font-semibold text-gray-700 mb-2">
+                Your Name
+              </label>
+              <input type="text" id="commenter_name" name="commenter_name" required readonly
+                value="{{user.username}}"
+                class="w-full px-4 py-3 border-2 border-gray-200 bg-gray-100 rounded-lg outline-none cursor-not-allowed"
+                placeholder="Enter your name">
+            </div>
+            
+            <div>
+              <label for="commenter_email" class="block text-sm font-semibold text-gray-700 mb-2">
+                Email
+              </label>
+              <input type="email" id="commenter_email" name="commenter_email" readonly
+                value="{{user.email}}"
+                class="w-full px-4 py-3 border-2 border-gray-200 bg-gray-100 rounded-lg outline-none cursor-not-allowed"
+                placeholder="your@email.com">
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label for="comment_text" class="block text-sm font-semibold text-gray-700 mb-2">
+              Your Comment <span class="text-red-500">*</span>
+            </label>
+            <textarea id="comment_text" name="comment_text" rows="4" required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all resize-none"
+              placeholder="Share your thoughts..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-ripple bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2">
+            <i data-lucide="send" class="w-5 h-5"></i>
+            Post Comment
+          </button>
+        </form>
+      {{else}}
+        <!-- Login Required Message -->
+        <div class="mb-8 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 border-2 border-blue-200 text-center">
+          <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i data-lucide="lock" class="w-8 h-8 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Login Required</h3>
+          <p class="text-gray-600 mb-6">You need to be logged in to leave a comment</p>
+          <a href="/login?redirect=/public/announcement/{{announcement.id}}" 
+             class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+            <i data-lucide="log-in" class="w-5 h-5"></i>
+            Login to Comment
+          </a>
+        </div>
+      {{/if}}
+
+      <!-- Comments List -->
+      {{#if comments.length}}
+        <div class="space-y-6">
+          {{#each comments}}
+            <div class="bg-gray-50 rounded-xl p-6 hover:bg-gray-100 transition-colors">
+              <div class="flex items-start gap-4">
+                <div class="flex-shrink-0">
+                  <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    {{substring commenter_name 0 1}}
+                  </div>
+                </div>
+                
+                <div class="flex-1">
+                  <div class="flex items-center gap-3 mb-2">
+                    <h4 class="font-bold text-gray-900">{{commenter_name}}</h4>
+                    <span class="text-sm text-gray-500 flex items-center gap-1">
+                      <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                      {{created_at}}
+                    </span>
+                  </div>
+                  
+                  <p class="text-gray-700 leading-relaxed">{{comment_text}}</p>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <div class="text-center py-12 bg-gray-50 rounded-xl">
+          <i data-lucide="message-circle" class="w-16 h-16 text-gray-300 mx-auto mb-3"></i>
+          <p class="text-gray-500 font-medium">No comments yet. Be the first to comment!</p>
+        </div>
+      {{/if}}
+    </div>
+  </article>
+
+  <!-- Image Modal -->
+  <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" onclick="closeImageModal()">
+    <button class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors" onclick="closeImageModal()">
+      <i data-lucide="x" class="w-8 h-8"></i>
+    </button>
+    <img id="modalImage" src="" class="max-w-full max-h-full rounded-lg shadow-2xl" onclick="event.stopPropagation()">
+  </div>
+
+  {{> footer }}
+
+  <script>
+    lucide.createIcons();
+
+    // Image modal functions
+    function openImageModal(src) {
+      document.getElementById('modalImage').src = src;
+      document.getElementById('imageModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeImageModal() {
+      document.getElementById('imageModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeImageModal();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | BORS</title>
+  <link rel="stylesheet" href="/tailwind.css" />
+  <link rel="stylesheet" href="/custom-styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+{{>head}}
+<body class="bg-gradient-to-br from-gray-50 to-green-50 text-gray-800 font-sans antialiased"></body>
+  {{> navbar }}
+
+  <!-- ✅ Dashboard Header -->
+  <section class="bg-gradient-to-r from-green-600 via-green-700 to-green-800 py-6 md:py-12 shadow-2xl relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full mix-blend-multiply filter blur-3xl animate-float"></div>
+    </div>
+    <div class="max-w-6xl mx-auto px-4 text-center text-white relative z-10 animate-fadeIn">
+      <div class="flex justify-center mb-3">
+        <i data-lucide="shield-check" class="w-12 h-12 md:w-16 md:h-16 text-white animate-pulse-slow"></i>
+      </div>
+      <h1 class="text-2xl md:text-4xl font-extrabold mb-2">Welcome, Captain!</h1>
+      <p class="text-green-50 text-sm md:text-lg">Manage officials, residents, and announcements efficiently</p>
+    </div>
+  </section>
+
+  </div>
+
+
+
+  <!-- ✅ Dashboard Cards Grid - ENHANCED -->
+  <section class="max-w-7xl mx-auto px-3 md:px-6 py-4 md:py-12">
+    <!-- Section Header -->
+    <div class="mb-6 md:mb-8 text-center animate-fadeIn">
+      <h2 class="text-xl md:text-3xl font-extrabold text-gray-800 mb-2">Quick Actions</h2>
+      <p class="text-sm md:text-base text-gray-600">Manage your barangay operations efficiently</p>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+      
+      <!-- Card 1: Total Residents - Stats Card -->
+      <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl md:rounded-3xl border-2 border-blue-200 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="users" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-2xl md:text-4xl font-extrabold text-blue-700 mb-1 md:mb-2">{{totalResidents}}</h3>
+        <p class="text-xs md:text-sm text-blue-600 font-semibold">Total Residents</p>
+      </div>
+
+      <!-- Card 2: Certificates - Stats Card -->
+      <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl md:rounded-3xl border-2 border-purple-200 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="file-text" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-2xl md:text-4xl font-extrabold text-purple-700 mb-1 md:mb-2">{{totalCertificates}}</h3>
+        <p class="text-xs md:text-sm text-purple-600 font-semibold">Certificates</p>
+      </div>
+
+      <!-- Card 3: Blotter Reports - Stats Card -->
+      <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl md:rounded-3xl border-2 border-orange-200 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-orange-500 to-orange-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="alert-octagon" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-2xl md:text-4xl font-extrabold text-orange-700 mb-1 md:mb-2">{{totalBlotters}}</h3>
+        <p class="text-xs md:text-sm text-orange-600 font-semibold">Blotter Reports</p>
+      </div>
+
+      <!-- Card 4: Manage Officials - Action Card -->
+      <a href="/officials" class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl md:rounded-3xl border-2 border-green-200 hover:border-green-400 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-green-500 to-green-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="user-check" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-sm md:text-lg font-bold text-green-700 group-hover:text-green-800">Manage Officials</h3>
+        <p class="text-xs text-green-600 mt-1 hidden md:block">View & manage officials</p>
+      </a>
+
+      <!-- Card 5: Manage Residents - Action Card -->
+      <a href="/residents" class="bg-gradient-to-br from-teal-50 to-teal-100 rounded-2xl md:rounded-3xl border-2 border-teal-200 hover:border-teal-400 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-teal-500 to-teal-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="home" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-sm md:text-lg font-bold text-teal-700 group-hover:text-teal-800">Manage Residents</h3>
+        <p class="text-xs text-teal-600 mt-1 hidden md:block">View & manage residents</p>
+      </a>
+
+      <!-- Card 6: Announcements - Action Card -->
+      <a href="/announcement/new" class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl md:rounded-3xl border-2 border-pink-200 hover:border-pink-400 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-pink-500 to-pink-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="megaphone" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-sm md:text-lg font-bold text-pink-700 group-hover:text-pink-800">Announcements</h3>
+        <p class="text-xs text-pink-600 mt-1 hidden md:block">Create announcements</p>
+      </a>
+
+      <!-- Card 7: Certificate Settings - Action Card -->
+      <a href="/certificate-settings" class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl md:rounded-3xl border-2 border-indigo-200 hover:border-indigo-400 shadow-lg hover:shadow-2xl p-4 md:p-6 text-center hover-lift card-glow transition-all duration-300 group">
+        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 p-3 md:p-4 rounded-2xl w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <i data-lucide="settings" class="w-6 h-6 md:w-8 md:h-8 text-white"></i>
+        </div>
+        <h3 class="text-sm md:text-lg font-bold text-indigo-700 group-hover:text-indigo-800">Certificate Settings</h3>
+        <p class="text-xs text-indigo-600 mt-1 hidden md:block">Customize certificates</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ✅ Recent Announcements - Compact View -->
+  <section class="max-w-7xl mx-auto px-4 md:px-6 pb-12 md:pb-16 animate-fadeIn">
+    <div class="flex items-center justify-between mb-6 md:mb-8">
+      <div>
+        <h2 class="text-xl md:text-3xl font-extrabold text-gray-800 flex items-center gap-3">
+          <div class="bg-gradient-to-br from-green-100 to-green-200 p-2 md:p-3 rounded-xl">
+            <i data-lucide="megaphone" class="w-5 h-5 md:w-7 md:h-7 text-green-600"></i>
+          </div>
+          Recent Announcements
+        </h2>
+        <p class="text-sm text-gray-600 mt-1 ml-12 md:ml-14">Latest updates from the barangay</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="/announcements" class="btn-ripple bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 md:px-4 md:py-2 text-xs md:text-sm rounded-xl font-semibold transition-all flex items-center gap-2 hover:scale-105 shadow-md">
+          <i data-lucide="list" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">View All</span>
+        </a>
+        <a href="/announcement/new" class="btn-ripple bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-3 py-2 md:px-5 md:py-3 text-xs md:text-sm rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 font-bold hover:scale-105">
+          <i data-lucide="plus-circle" class="w-4 h-4 md:w-5 md:h-5"></i> 
+          <span class="hidden sm:inline">Add New</span>
+          <span class="sm:hidden">Add</span>
+        </a>
+      </div>
+    </div>
+
+    {{#if announcements.length}}
+    <!-- Grid Layout for Announcements -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      {{#each announcements}}
+      <div class="bg-white rounded-2xl shadow-lg border-2 border-gray-200 hover:border-green-300 overflow-hidden hover-lift card-glow transition-all duration-300 group">
+        <!-- Media Preview - Multiple Files -->
+        {{#if this.media.length}}
+          <div class="relative h-40 md:h-48 overflow-hidden bg-gradient-to-br from-green-50 to-green-100">
+            {{#if (or (endsWith this.media.[0] ".jpg") (endsWith this.media.[0] ".png") (endsWith this.media.[0] ".jpeg") (endsWith this.media.[0] ".gif") (endsWith this.media.[0] ".webp"))}}
+              <img src="/uploads/{{this.media.[0]}}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+              {{#if this.media.[1]}}
+                <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+                  <i data-lucide="images" class="w-3 h-3"></i>
+                  +{{this.media.length}}
+                </div>
+              {{/if}}
+            {{else if (or (endsWith this.media.[0] ".mp4") (endsWith this.media.[0] ".mov") (endsWith this.media.[0] ".avi") (endsWith this.media.[0] ".webm") (endsWith this.media.[0] ".mkv"))}}
+              <video class="w-full h-full object-cover bg-black" preload="metadata">
+                <source src="/uploads/{{this.media.[0]}}" type="video/mp4">
+              </video>
+              <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                <i data-lucide="play-circle" class="w-12 h-12 text-white"></i>
+              </div>
+              {{#if this.media.[1]}}
+                <div class="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+                  <i data-lucide="images" class="w-3 h-3"></i>
+                  +{{this.media.length}}
+                </div>
+              {{/if}}
+            {{/if}}
+          </div>
+        {{else}}
+          <div class="h-40 md:h-48 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+            <i data-lucide="megaphone" class="w-16 h-16 text-green-400"></i>
+          </div>
+        {{/if}}
+
+        <!-- Content -->
+        <div class="p-4 md:p-5">
+          <h3 class="text-base md:text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-green-600 transition-colors">{{title}}</h3>
+          <p class="text-sm text-gray-600 leading-relaxed mb-3 line-clamp-3">{{message}}</p>
+          
+          <!-- Footer -->
+          <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+            <div class="flex items-center gap-2 text-xs text-gray-500">
+              <i data-lucide="user" class="w-3 h-3"></i>
+              <span class="font-medium">{{posted_by}}</span>
+            </div>
+            <div class="flex items-center gap-1 text-xs text-gray-500">
+              <i data-lucide="calendar" class="w-3 h-3"></i>
+              <span>{{date_posted}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <!-- View All Button (Mobile) -->
+    <div class="mt-6 text-center">
+      <a href="/announcements" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+        View All Announcements
+      </a>
+    </div>
+
+    {{else}}
+    <!-- Empty State -->
+    <div class="text-center py-16 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border-2 border-dashed border-green-300">
+      <div class="bg-white p-4 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+        <i data-lucide="megaphone" class="w-10 h-10 text-green-400"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-700 mb-2">No Announcements Yet</h3>
+      <p class="text-gray-600 mb-6">Start by creating your first announcement</p>
+      <a href="/announcement/new" class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+        Create First Announcement
+      </a>
+    </div>
+    {{/if}}
+  </section>
+
+  {{> footer }}
