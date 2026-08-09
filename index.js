@@ -245,7 +245,7 @@ io.on('connection', (socket) => {
   });
 });
 
-export default httpServer;
+export default app;
 export { app, io };
 
 // Start server after the database is ready
@@ -271,5 +271,3 @@ const initializeApp = async () => {
 };
 
 initializeApp();
-
-export { app as default };
